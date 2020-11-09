@@ -1,0 +1,229 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{ED98C160-6E07-4480-B137-90E447E35D12}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>EnvMgr</RootNamespace>
+    <AssemblyName>EnvMgr</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Dapper, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.2.0.35\lib\net461\Dapper.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BackupBackups.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BackupBackups.Designer.cs">
+      <DependentUpon>BackupBackups.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DLLManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DLLManager.Designer.cs">
+      <DependentUpon>DLLManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ExceptionHandling.cs" />
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LastInstalled.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LastInstalled.Designer.cs">
+      <DependentUpon>LastInstalled.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LaunchOtherProducts.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LaunchOtherProducts.Designer.cs">
+      <DependentUpon>LaunchOtherProducts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LaunchSPGP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LaunchSPGP.Designer.cs">
+      <DependentUpon>LaunchSPGP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewDBBackup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewDBBackup.Designer.cs">
+      <DependentUpon>NewDBBackup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewDBBackupSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewDBBackupSelect.Designer.cs">
+      <DependentUpon>NewDBBackupSelect.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OtherInstall.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OtherInstall.Designer.cs">
+      <DependentUpon>OtherInstall.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OverwriteBackup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OverwriteBackup.Designer.cs">
+      <DependentUpon>OverwriteBackup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PurgeCloud.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PurgeCloud.Designer.cs">
+      <DependentUpon>PurgeCloud.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ResetDBVersion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ResetDBVersion.Designer.cs">
+      <DependentUpon>ResetDBVersion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Settings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Settings.Designer.cs">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SettingsPop.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingsPop.Designer.cs">
+      <DependentUpon>SettingsPop.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SPGPInstall.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SPGPInstall.Designer.cs">
+      <DependentUpon>SPGPInstall.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Utilities.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Utilities.Designer.cs">
+      <DependentUpon>Utilities.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="BackupBackups.resx">
+      <DependentUpon>BackupBackups.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DLLManager.resx">
+      <DependentUpon>DLLManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LastInstalled.resx">
+      <DependentUpon>LastInstalled.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LaunchOtherProducts.resx">
+      <DependentUpon>LaunchOtherProducts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LaunchSPGP.resx">
+      <DependentUpon>LaunchSPGP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewDBBackup.resx">
+      <DependentUpon>NewDBBackup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewDBBackupSelect.resx">
+      <DependentUpon>NewDBBackupSelect.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OtherInstall.resx">
+      <DependentUpon>OtherInstall.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OverwriteBackup.resx">
+      <DependentUpon>OverwriteBackup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="PurgeCloud.resx">
+      <DependentUpon>PurgeCloud.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ResetDBVersion.resx">
+      <DependentUpon>ResetDBVersion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Settings.resx">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingsPop.resx">
+      <DependentUpon>SettingsPop.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SPGPInstall.resx">
+      <DependentUpon>SPGPInstall.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Utilities.resx">
+      <DependentUpon>Utilities.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="app.manifest" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
