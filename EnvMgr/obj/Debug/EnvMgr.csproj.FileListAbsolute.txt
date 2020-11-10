@@ -23,5 +23,4 @@ C:\Users\steve.rodriguez\source\repos\EnvMgr\EnvMgr\bin\Debug\Dapper.xml
 C:\Users\steve.rodriguez\source\repos\EnvMgr\EnvMgr\obj\Debug\EnvMgr.PurgeCloud.resources
 C:\Users\steve.rodriguez\source\repos\EnvMgr\EnvMgr\obj\Debug\EnvMgr.csproj.CopyComplete
 C:\Users\steve.rodriguez\source\repos\EnvMgr\EnvMgr\obj\Debug\EnvMgr.NewDBBackupSelect.resources
-C:\Users\steve.rodriguez\source\repos\EnvMgr\EnvMgr\obj\Debug\EnvMgr.csprojAssemblyReference.cache
 C:\Users\steve.rodriguez\source\repos\EnvMgr\EnvMgr\obj\Debug\EnvMgr.BackupBackups.resources

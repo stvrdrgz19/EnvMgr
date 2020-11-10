@@ -444,7 +444,31 @@ namespace EnvMgr
                         string.Format(
                             "The given sql version {0} is not supported", sqlVersion));
             }
-            Process.Start(installerPath, configFile);
+            try
+            {
+                Process.Start(installerPath, configFile);
+            }
+            catch (Win32Exception networkE)
+            {
+                bool error = ExceptionHandling.LogException(networkE.ToString(), "Error connectiong to Network. No VPN connection established.");
+                if (!error)
+                {
+                    MessageBox.Show("There was an error logging the exception, no crashlog file could be found or generated. There was a problem connecting to the Network. Please ensure you're connected to the VPN and try again.");
+                    return;
+                }
+                string message = "There was a problem connecting to the Network. Please ensure you're connected to the VPN and try again. \n\nWould you like to view the crashlog?";
+                string caption = "ERROR";
+                MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+                MessageBoxIcon icon = MessageBoxIcon.Error;
+                DialogResult result;
+
+                result = MessageBox.Show(message, caption, buttons, icon);
+                if (result == DialogResult.Yes)
+                {
+                    Process.Start(Environment.CurrentDirectory + @"\Files\Crashlog.txt");
+                }
+                return;
+            }
             LoadSQLServerListView();
         }
 
