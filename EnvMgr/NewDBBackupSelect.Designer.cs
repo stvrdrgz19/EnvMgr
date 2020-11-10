@@ -42,7 +42,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 16);
+            this.label1.Location = new System.Drawing.Point(4, 4);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(112, 13);
             this.label1.TabIndex = 0;
@@ -50,7 +50,7 @@
             // 
             // tbDBName
             // 
-            this.tbDBName.Location = new System.Drawing.Point(14, 30);
+            this.tbDBName.Location = new System.Drawing.Point(6, 18);
             this.tbDBName.Name = "tbDBName";
             this.tbDBName.Size = new System.Drawing.Size(395, 20);
             this.tbDBName.TabIndex = 1;
@@ -58,7 +58,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 59);
+            this.label2.Location = new System.Drawing.Point(4, 47);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(146, 13);
             this.label2.TabIndex = 2;
@@ -67,15 +67,15 @@
             // lbDatabases
             // 
             this.lbDatabases.FormattingEnabled = true;
-            this.lbDatabases.Location = new System.Drawing.Point(14, 73);
+            this.lbDatabases.Location = new System.Drawing.Point(6, 61);
             this.lbDatabases.Name = "lbDatabases";
             this.lbDatabases.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-            this.lbDatabases.Size = new System.Drawing.Size(395, 147);
+            this.lbDatabases.Size = new System.Drawing.Size(395, 95);
             this.lbDatabases.TabIndex = 3;
             // 
             // tbDBDescription
             // 
-            this.tbDBDescription.Location = new System.Drawing.Point(14, 247);
+            this.tbDBDescription.Location = new System.Drawing.Point(6, 180);
             this.tbDBDescription.Multiline = true;
             this.tbDBDescription.Name = "tbDBDescription";
             this.tbDBDescription.Size = new System.Drawing.Size(395, 147);
@@ -84,7 +84,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 231);
+            this.label3.Location = new System.Drawing.Point(4, 164);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(96, 13);
             this.label3.TabIndex = 5;
@@ -92,7 +92,7 @@
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(256, 398);
+            this.btnOK.Location = new System.Drawing.Point(248, 331);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 6;
@@ -102,7 +102,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(335, 398);
+            this.btnCancel.Location = new System.Drawing.Point(327, 331);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 7;
@@ -114,7 +114,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(423, 425);
+            this.ClientSize = new System.Drawing.Size(406, 358);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.label3);

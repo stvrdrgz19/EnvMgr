@@ -1050,13 +1050,13 @@ namespace EnvMgr
                 MessageBox.Show("Please select a GP version before creating a database backup.");
                 return;
             }
-            if (Control.ModifierKeys == Keys.Shift)
-            {
-                NewDBBackupSelect newDBBackupSelect = new NewDBBackupSelect(this);
-                newDBBackupSelect.FormClosing += new FormClosingEventHandler(ClosingNewDBBackup);
-                newDBBackupSelect.Show();
-                return;
-            }
+            //if (Control.ModifierKeys == Keys.Shift)
+            //{
+            //    NewDBBackupSelect newDBBackupSelect = new NewDBBackupSelect(this);
+            //    newDBBackupSelect.FormClosing += new FormClosingEventHandler(ClosingNewDBBackup);
+            //    newDBBackupSelect.Show();
+            //    return;
+            //}
             string Message = "Are you sure you want to create a new Database Backup??";
             string Caption = "CONFIRM";
             MessageBoxButtons Buttons = MessageBoxButtons.YesNo;
@@ -1066,11 +1066,15 @@ namespace EnvMgr
             Result = MessageBox.Show(Message, Caption, Buttons, Icon);
             if (Result == DialogResult.Yes)
             {
-                dbToCreate = cbDatabaseList.Text;
-                NewDBBackup newDBBackup = new NewDBBackup(this);
-                newDBBackup.FormClosing += new FormClosingEventHandler(ClosingNewDBBackup);
-                newDBBackup.Show();
+                NewDBBackupSelect newDBBackupSelect = new NewDBBackupSelect(this);
+                newDBBackupSelect.FormClosing += new FormClosingEventHandler(ClosingNewDBBackup);
+                newDBBackupSelect.Show();
+                //dbToCreate = cbDatabaseList.Text;
+                //NewDBBackup newDBBackup = new NewDBBackup(this);
+                //newDBBackup.FormClosing += new FormClosingEventHandler(ClosingNewDBBackup);
+                //newDBBackup.Show();
             }
+            return;
         }
         private void ClosingNewDBBackup(object sender, FormClosingEventArgs e)
         {
