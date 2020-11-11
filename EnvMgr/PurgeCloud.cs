@@ -59,7 +59,6 @@ namespace EnvMgr
         private void PurgeCloud_Load(object sender, EventArgs e)
         {
             LoadEnvironments();
-            LoadEnvironments();
             return;
         }
 

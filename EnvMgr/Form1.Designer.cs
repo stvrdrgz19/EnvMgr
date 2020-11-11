@@ -43,10 +43,12 @@
             this.shipCenterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.databaseLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.purgeCloudEnvironmentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.backupBackupsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnLaunchGPUtils = new System.Windows.Forms.Button();
             this.checkManufacturingToggle = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.btnLaunchSelectedGP = new System.Windows.Forms.Button();
@@ -83,8 +85,7 @@
             this.tbIPAddress = new System.Windows.Forms.TextBox();
             this.labelReloadIPAddress = new System.Windows.Forms.Label();
             this.cbAlwaysOnTop = new System.Windows.Forms.CheckBox();
-            this.backupBackupsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnLaunchGPUtils = new System.Windows.Forms.Button();
+            this.purgeGPDatabasesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -135,7 +136,8 @@
             this.deleteBuildsToolStripMenuItem,
             this.databaseLogToolStripMenuItem,
             this.purgeCloudEnvironmentsToolStripMenuItem,
-            this.backupBackupsToolStripMenuItem});
+            this.backupBackupsToolStripMenuItem,
+            this.purgeGPDatabasesToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -207,6 +209,13 @@
             this.purgeCloudEnvironmentsToolStripMenuItem.Text = "Purge Cloud Environments";
             this.purgeCloudEnvironmentsToolStripMenuItem.Click += new System.EventHandler(this.purgeCloudEnvironmentsToolStripMenuItem_Click);
             // 
+            // backupBackupsToolStripMenuItem
+            // 
+            this.backupBackupsToolStripMenuItem.Name = "backupBackupsToolStripMenuItem";
+            this.backupBackupsToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
+            this.backupBackupsToolStripMenuItem.Text = "Backup Backups";
+            this.backupBackupsToolStripMenuItem.Click += new System.EventHandler(this.backupBackupsToolStripMenuItem_Click);
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -245,6 +254,17 @@
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Dynamics GP Management";
+            // 
+            // btnLaunchGPUtils
+            // 
+            this.btnLaunchGPUtils.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnLaunchGPUtils.Location = new System.Drawing.Point(126, 146);
+            this.btnLaunchGPUtils.Name = "btnLaunchGPUtils";
+            this.btnLaunchGPUtils.Size = new System.Drawing.Size(121, 23);
+            this.btnLaunchGPUtils.TabIndex = 7;
+            this.btnLaunchGPUtils.Text = "Launch GP Utils";
+            this.btnLaunchGPUtils.UseVisualStyleBackColor = true;
+            this.btnLaunchGPUtils.Click += new System.EventHandler(this.btnLaunchGPUtils_Click);
             // 
             // checkManufacturingToggle
             // 
@@ -664,23 +684,12 @@
             this.cbAlwaysOnTop.UseVisualStyleBackColor = true;
             this.cbAlwaysOnTop.CheckedChanged += new System.EventHandler(this.cbAlwaysOnTop_CheckedChanged);
             // 
-            // backupBackupsToolStripMenuItem
+            // purgeGPDatabasesToolStripMenuItem
             // 
-            this.backupBackupsToolStripMenuItem.Name = "backupBackupsToolStripMenuItem";
-            this.backupBackupsToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
-            this.backupBackupsToolStripMenuItem.Text = "Backup Backups";
-            this.backupBackupsToolStripMenuItem.Click += new System.EventHandler(this.backupBackupsToolStripMenuItem_Click);
-            // 
-            // btnLaunchGPUtils
-            // 
-            this.btnLaunchGPUtils.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnLaunchGPUtils.Location = new System.Drawing.Point(126, 146);
-            this.btnLaunchGPUtils.Name = "btnLaunchGPUtils";
-            this.btnLaunchGPUtils.Size = new System.Drawing.Size(121, 23);
-            this.btnLaunchGPUtils.TabIndex = 7;
-            this.btnLaunchGPUtils.Text = "Launch GP Utils";
-            this.btnLaunchGPUtils.UseVisualStyleBackColor = true;
-            this.btnLaunchGPUtils.Click += new System.EventHandler(this.btnLaunchGPUtils_Click);
+            this.purgeGPDatabasesToolStripMenuItem.Name = "purgeGPDatabasesToolStripMenuItem";
+            this.purgeGPDatabasesToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
+            this.purgeGPDatabasesToolStripMenuItem.Text = "Purge GP Databases";
+            this.purgeGPDatabasesToolStripMenuItem.Click += new System.EventHandler(this.purgeGPDatabasesToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -773,6 +782,7 @@
         private System.Windows.Forms.ToolStripMenuItem purgeCloudEnvironmentsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem backupBackupsToolStripMenuItem;
         private System.Windows.Forms.Button btnLaunchGPUtils;
+        private System.Windows.Forms.ToolStripMenuItem purgeGPDatabasesToolStripMenuItem;
     }
 }
 

@@ -41,6 +41,7 @@ namespace EnvMgr
         public static string SPGPFilePath = "";
         public static string ProductFilePath = "";
         public static string ProductFileName = "";
+        public static string dbToRestore = "";
 
         private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
         {
@@ -987,6 +988,14 @@ namespace EnvMgr
 
         private void btnRestoreDB_Click(object sender, EventArgs e)
         {
+            if (Control.ModifierKeys == Keys.Shift)
+            {
+                selectedGPVersion = cbSelectedGP.Text;
+                dbToRestore = cbDatabaseList.Text;
+                RestoreDB restoreDB = new RestoreDB(this);
+                restoreDB.Show();
+                return;
+            }
             string selectedDB = cbDatabaseList.Text;
             string gpVersion = cbSelectedGP.Text;
             bool isDBSelected = IsDBSelected(selectedDB);
@@ -1504,6 +1513,13 @@ namespace EnvMgr
             int res1 = Test.Results1(5, 2);
             int res2 = Test.Results2(5, 2);
             MessageBox.Show(Convert.ToString(res1) + "\n" + Convert.ToString(res2));
+            return;
+        }
+
+        private void purgeGPDatabasesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PurgeGPDatabases purgeGPDatabases = new PurgeGPDatabases(this);
+            purgeGPDatabases.Show();
             return;
         }
     }

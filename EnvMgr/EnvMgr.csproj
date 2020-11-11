@@ -123,11 +123,23 @@
     <Compile Include="PurgeCloud.Designer.cs">
       <DependentUpon>PurgeCloud.cs</DependentUpon>
     </Compile>
+    <Compile Include="PurgeGPDatabases.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PurgeGPDatabases.Designer.cs">
+      <DependentUpon>PurgeGPDatabases.cs</DependentUpon>
+    </Compile>
     <Compile Include="ResetDBVersion.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ResetDBVersion.Designer.cs">
       <DependentUpon>ResetDBVersion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RestoreDB.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RestoreDB.Designer.cs">
+      <DependentUpon>RestoreDB.cs</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs">
       <SubType>Form</SubType>
@@ -195,8 +207,14 @@
     <EmbeddedResource Include="PurgeCloud.resx">
       <DependentUpon>PurgeCloud.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="PurgeGPDatabases.resx">
+      <DependentUpon>PurgeGPDatabases.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ResetDBVersion.resx">
       <DependentUpon>ResetDBVersion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RestoreDB.resx">
+      <DependentUpon>RestoreDB.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Settings.resx">
       <DependentUpon>Settings.cs</DependentUpon>
