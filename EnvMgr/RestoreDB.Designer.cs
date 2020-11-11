@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RestoreDB));
             this.label1 = new System.Windows.Forms.Label();
             this.lbDatabaseList = new System.Windows.Forms.ListBox();
             this.btnRestore = new System.Windows.Forms.Button();
@@ -68,6 +69,7 @@
             this.Controls.Add(this.btnRestore);
             this.Controls.Add(this.lbDatabaseList);
             this.Controls.Add(this.label1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "RestoreDB";
             this.Text = "Restore";
             this.Load += new System.EventHandler(this.RestoreDB_Load);

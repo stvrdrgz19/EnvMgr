@@ -42,6 +42,7 @@ namespace EnvMgr
         public static string ProductFilePath = "";
         public static string ProductFileName = "";
         public static string dbToRestore = "";
+        public static string dbToOverwrite = "";
 
         private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
         {
@@ -1022,7 +1023,16 @@ namespace EnvMgr
         private void btnOverwriteDB_Click(object sender, EventArgs e)
         {
             string selectedDB = cbDatabaseList.Text;
+            dbToOverwrite = cbDatabaseList.Text;
             selectedGPVersion = cbSelectedGP.Text;
+            if (Control.ModifierKeys == Keys.Shift)
+            {
+                OverwriteBackupSelect overwriteBackupSelect = new OverwriteBackupSelect(this);
+                overwriteBackupSelect.Show();
+                //RestoreDB restoreDB = new RestoreDB(this);
+                //restoreDB.Show();
+                return;
+            }
             bool isDBSelected = IsDBSelected(selectedDB);
             if (isDBSelected == false)
             {
@@ -1368,6 +1378,11 @@ namespace EnvMgr
 
         private void labelReloadIPAddress_Click(object sender, EventArgs e)
         {
+            if (Control.ModifierKeys == Keys.Shift)
+            {
+                MessageBox.Show(Environment.MachineName);
+                return;
+            }
             SetIPAddress();
             return;
         }

@@ -23,7 +23,7 @@ namespace EnvMgr
         }
 
         private void LoadDatabases(string service)
-        {
+        { 
             if (service == "Please select a SQL Server...")
             {
                 return;
@@ -42,6 +42,24 @@ namespace EnvMgr
             {
                 string errorMessage = "There was an exception connecting to the selected SQL Service. Please ensure the selected Sql Service is still running and try again.";
                 ExceptionHandling.LogException(errorThrown.ToString(), errorMessage);
+                MessageBox.Show(errorMessage);
+            }
+        }
+
+        private void DeleteDatabase(string database, string sqlServer)
+        {
+            string sqlScript = "@DROP DATABASE [" + database + "]";
+            try
+            {
+                SqlConnection sqlCon = new SqlConnection(@"Data Source=STEVERODRIGUEZ\" + sqlServer + ";Initial Catalog=MASTER;User ID=sa;Password=sa;");
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(sqlScript, sqlCon);
+                DataTable dataTable = new DataTable();
+                dataAdapter.Fill(dataTable);
+            }
+            catch (Exception dbDeleteError)
+            {
+                string errorMessage = "There was a problem dropping the \"" + database + "\" database. Please insure your selected SQL Server is running and try again.";
+                ExceptionHandling.LogException(dbDeleteError.ToString(), errorMessage);
                 MessageBox.Show(errorMessage);
             }
         }
@@ -96,7 +114,7 @@ namespace EnvMgr
             {
                 foreach (string database in lbDatabaseList.SelectedItems)
                 {
-                    //foreach (selectedItem) DeleteMethod
+                    DeleteDatabase(database, cbSQLServer.Text);
                 }
                 LoadDatabases(cbSQLServer.Text);
                 MessageBox.Show("The selected databases were successfully deleted.");
