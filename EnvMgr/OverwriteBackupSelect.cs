@@ -24,6 +24,12 @@ namespace EnvMgr
             _form1 = form1;
         }
 
+        private void ButtonsEnabled(bool tf)
+        {
+            btnOK.Enabled = tf;
+            btnCancel.Enabled = tf;
+        }
+
         private void LoadDatabases()
         {
             List<string> runningSQLServer = SQLManagement.GetRunningSQLServers();
@@ -73,15 +79,18 @@ namespace EnvMgr
         private void OverwriteDatabases(string[] databases, string path, string bakName, string bakDescription)
         {
             _form1.DisableDBControls(false);
+            ButtonsEnabled(false);
             List<string> runningSQLServer = SQLManagement.GetRunningSQLServers();
             if (runningSQLServer.Count > 1)
             {
                 MessageBox.Show("There are multiple sql servers running. Please stop any sql servers not being used. Environment Manager will target the remaining running sql server.");
+                ButtonsEnabled(true);
                 return;
             }
             if (runningSQLServer.Count == 0)
             {
                 MessageBox.Show("There are no sql servers running. Please start a sql server and try again.");
+                ButtonsEnabled(true);
                 return;
             }
             foreach (string server in runningSQLServer)
@@ -95,35 +104,36 @@ namespace EnvMgr
                         SqlDataAdapter overwriteDB = new SqlDataAdapter(sqlScript, sqlCon);
                         DataTable overwriteDbTab = new DataTable();
                         overwriteDB.Fill(overwriteDbTab);
-
-                        using (StreamWriter sw = File.AppendText(path + @"\Description.txt"))
-                        {
-                            sw.WriteLine("===============================================================================");
-                            sw.WriteLine("BACKUP - " + bakName);
-                            sw.WriteLine(DateTime.Now);
-                            sw.WriteLine(bakDescription);
-                        }
-                        using (StreamWriter sw = File.AppendText(Environment.CurrentDirectory + @"\Files\Database Log.txt"))
-                        {
-                            sw.WriteLine("{" + DateTime.Now + "} - OVERWROTE: " + bakName);
-                        }
-                        string message = "Backup \"" + Form1.dbToCreate + "\" was overwritten successfully.";
-                        string caption = "COMPLETE";
-                        MessageBoxButtons button = MessageBoxButtons.OK;
-                        MessageBoxIcon icon = MessageBoxIcon.Exclamation;
-                        DialogResult Result;
-
-                        Result = MessageBox.Show(message, caption, button, icon);
-                        _form1.DisableDBControls(true);
-                        this.Close();
-                        return;
                     }
+                    using (StreamWriter sw = File.AppendText(path + @"\Description.txt"))
+                    {
+                        sw.WriteLine("===============================================================================");
+                        sw.WriteLine("BACKUP - " + bakName);
+                        sw.WriteLine(DateTime.Now);
+                        sw.WriteLine(bakDescription);
+                    }
+                    using (StreamWriter sw = File.AppendText(Environment.CurrentDirectory + @"\Files\Database Log.txt"))
+                    {
+                        sw.WriteLine("{" + DateTime.Now + "} - OVERWROTE: " + bakName);
+                    }
+                    string message = "Backup \"" + Form1.dbToOverwrite + "\" was overwritten successfully.";
+                    string caption = "COMPLETE";
+                    MessageBoxButtons button = MessageBoxButtons.OK;
+                    MessageBoxIcon icon = MessageBoxIcon.Exclamation;
+                    DialogResult Result;
+
+                    Result = MessageBox.Show(message, caption, button, icon);
+                    _form1.DisableDBControls(true);
+                    ButtonsEnabled(true);
+                    this.Close();
+                    return;
                 }
                 catch (Exception error)
                 {
                     string errorMessage = "An exception was encountered while attempting to overwrite \"" + bakName + "\".";
                     ExceptionHandling.LogException(error.ToString(), errorMessage);
                     MessageBox.Show(errorMessage);
+                    ButtonsEnabled(true);
                     return;
                 }
             }
@@ -145,15 +155,15 @@ namespace EnvMgr
             }
             string backupDescription = tbDescription.Text;
             List<string> selectedDatabases = new List<string>();
-            foreach (string database in lbExistingDatabases.SelectedItems)
+            foreach (string database in lbDatabaseFiles.SelectedItems)
             {
                 selectedDatabases.Add(database);
             }
             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
             string path = Convert.ToString(key.GetValue("DB Folder")) + Form1.selectedGPVersion + "\\" + Form1.dbToOverwrite + "\\";
-            foreach (string database in lbExistingDatabases.SelectedItems)
+            foreach (string database in lbDatabaseFiles.SelectedItems)
             {
-                string filePath = path + database;
+                string filePath = path + database + ".bak";
                 if (File.Exists(filePath))
                 {
                     File.Delete(filePath);

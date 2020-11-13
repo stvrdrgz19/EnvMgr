@@ -767,128 +767,149 @@ namespace EnvMgr
 
         private void btnStartService_Click(object sender, EventArgs e)
         {
-            string selectedService = lvInstalledSQLServers.SelectedItems[0].Text;
-            string selectedServiceStatus = lvInstalledSQLServers.SelectedItems[0].SubItems[1].Text;
-            if (String.IsNullOrWhiteSpace(selectedService))
+            try
             {
-                return;
-            }
-            if (selectedServiceStatus == "NOT INSTALLED")
-            {
-                string message = "The selected Service \"" + selectedService + "\" could not be started because it isn't installed!";
-                string caption = "ERROR";
-                MessageBoxButtons buttons = MessageBoxButtons.OK;
-                MessageBoxIcon icon = MessageBoxIcon.Error;
-                DialogResult result;
+                string selectedService = lvInstalledSQLServers.SelectedItems[0].Text;
+                string selectedServiceStatus = lvInstalledSQLServers.SelectedItems[0].SubItems[1].Text;
+                if (selectedServiceStatus == "NOT INSTALLED")
+                {
+                    string message = "The selected Service \"" + selectedService + "\" could not be started because it isn't installed!";
+                    string caption = "ERROR";
+                    MessageBoxButtons buttons = MessageBoxButtons.OK;
+                    MessageBoxIcon icon = MessageBoxIcon.Error;
+                    DialogResult result;
 
-                result = MessageBox.Show(message, caption, buttons, icon);
+                    result = MessageBox.Show(message, caption, buttons, icon);
+                    return;
+                }
+                DisableSQLControls(false);
+                StartSQLServer(selectedService);
+                DisableSQLControls(true);
+                LoadSQLServerListView();
                 return;
             }
-            DisableSQLControls(false);
-            StartSQLServer(selectedService);
-            DisableSQLControls(true);
-            LoadSQLServerListView();
-            return;
+            catch (ArgumentOutOfRangeException exError)
+            {
+                string errorMessage = "Please select a Service to start.";
+                string logMessage = "Index doesn't exist.";
+                ExceptionHandling.LogException(exError.ToString(), logMessage);
+                MessageBox.Show(errorMessage);
+                return;
+            }
         }
 
         private void btnStopService_Click(object sender, EventArgs e)
         {
-            string selectedService = lvInstalledSQLServers.SelectedItems[0].Text;
-            string selectedServiceStatus = lvInstalledSQLServers.SelectedItems[0].SubItems[1].Text;
-            if (String.IsNullOrWhiteSpace(selectedService))
-            {
-                return;
-            }
-            if (selectedServiceStatus == "NOT INSTALLED")
-            {
-                string message = "The selected SQL Service \"" + selectedService + "\" is not installed!";
-                string caption = "ERROR";
-                MessageBoxButtons buttons = MessageBoxButtons.OK;
-                MessageBoxIcon icon = MessageBoxIcon.Error;
-                DialogResult result;
-
-                result = MessageBox.Show(message, caption, buttons, icon);
-                LoadSQLServerListView();
-                return;
-            }
-            if (selectedServiceStatus == "NOT RUNNING")
-            {
-                string message = "The selected SQL Service \"" + selectedService + "\" is not running!";
-                string caption = "ERROR";
-                MessageBoxButtons buttons = MessageBoxButtons.OK;
-                MessageBoxIcon icon = MessageBoxIcon.Error;
-                DialogResult result;
-
-                result = MessageBox.Show(message, caption, buttons, icon);
-                LoadSQLServerListView();
-                return;
-            }
-            ServiceController serviceToStop = new ServiceController("MSSQL$" + selectedService);
             try
             {
-                if (serviceToStop.Status.Equals(ServiceControllerStatus.Running))
+                string selectedService = lvInstalledSQLServers.SelectedItems[0].Text;
+                string selectedServiceStatus = lvInstalledSQLServers.SelectedItems[0].SubItems[1].Text;
+                if (selectedServiceStatus == "NOT INSTALLED")
                 {
-                    serviceToStop.Stop();
+                    string message = "The selected SQL Service \"" + selectedService + "\" is not installed!";
+                    string caption = "ERROR";
+                    MessageBoxButtons buttons = MessageBoxButtons.OK;
+                    MessageBoxIcon icon = MessageBoxIcon.Error;
+                    DialogResult result;
+
+                    result = MessageBox.Show(message, caption, buttons, icon);
+                    LoadSQLServerListView();
+                    return;
                 }
+                if (selectedServiceStatus == "NOT RUNNING")
+                {
+                    string message = "The selected SQL Service \"" + selectedService + "\" is not running!";
+                    string caption = "ERROR";
+                    MessageBoxButtons buttons = MessageBoxButtons.OK;
+                    MessageBoxIcon icon = MessageBoxIcon.Error;
+                    DialogResult result;
+
+                    result = MessageBox.Show(message, caption, buttons, icon);
+                    LoadSQLServerListView();
+                    return;
+                }
+                ServiceController serviceToStop = new ServiceController("MSSQL$" + selectedService);
+                try
+                {
+                    if (serviceToStop.Status.Equals(ServiceControllerStatus.Running))
+                    {
+                        serviceToStop.Stop();
+                    }
+                }
+                catch (Exception serviceException)
+                {
+                    MessageBox.Show("There was an error attempting to stop the service: " + selectedService + "\n\n" + serviceException);
+                }
+                LoadSQLServerListView();
+                return;
             }
-            catch (Exception serviceException)
+            catch (ArgumentOutOfRangeException exError)
             {
-                MessageBox.Show("There was an error attempting to stop the service: " + selectedService + "\n\n" + serviceException);
+                string errorMessage = "Please select a Service to stop.";
+                string logMessage = "Index doesn't exist.";
+                ExceptionHandling.LogException(exError.ToString(), logMessage);
+                MessageBox.Show(errorMessage);
+                return;
             }
-            LoadSQLServerListView();
-            return;
         }
 
         private void btnInstallService_Click(object sender, EventArgs e)
         {
-            string selectedService = lvInstalledSQLServers.SelectedItems[0].Text;
-            string selectedServiceStatus = lvInstalledSQLServers.SelectedItems[0].SubItems[1].Text;
-            if (String.IsNullOrWhiteSpace(selectedService))
+            try
             {
-                return;
-            }
-            if (selectedServiceStatus != "NOT INSTALLED")
-            {
-                string message = "The selected SQL Service \"" + selectedService + "\" is already installed!";
-                string caption = "ERROR";
-                MessageBoxButtons buttons = MessageBoxButtons.OK;
-                MessageBoxIcon icon = MessageBoxIcon.Error;
-                DialogResult result;
-
-                result = MessageBox.Show(message, caption, buttons, icon);
-                return;
-            }
-            string messageConfirm = "Are you sure you want to install \"" + selectedService + "\"? This process can take some time.";
-            string captionConfirm = "CONFIRM";
-            MessageBoxButtons buttonsConfirm = MessageBoxButtons.YesNo;
-            MessageBoxIcon iconConfirm = MessageBoxIcon.Question;
-            DialogResult resultConfirm;
-            resultConfirm = MessageBox.Show(messageConfirm, captionConfirm, buttonsConfirm, iconConfirm);
-
-            if (resultConfirm == DialogResult.Yes)
-            {
-                switch (selectedService)
+                string selectedService = lvInstalledSQLServers.SelectedItems[0].Text;
+                string selectedServiceStatus = lvInstalledSQLServers.SelectedItems[0].SubItems[1].Text;
+                if (selectedServiceStatus != "NOT INSTALLED")
                 {
-                    case "SQLSERVER2012":
-                        selectedService = "11";
-                        break;
-                    case "SQLSERVER2014":
-                        selectedService = "12";
-                        break;
-                    case "SQLSERVER2016":
-                        selectedService = "13";
-                        break;
-                    case "SQLSERVER2017":
-                        selectedService = "14";
-                        break;
-                    case "SQLSERVER2019":
-                        selectedService = "15";
-                        break;
+                    string message = "The selected SQL Service \"" + selectedService + "\" is already installed!";
+                    string caption = "ERROR";
+                    MessageBoxButtons buttons = MessageBoxButtons.OK;
+                    MessageBoxIcon icon = MessageBoxIcon.Error;
+                    DialogResult result;
+
+                    result = MessageBox.Show(message, caption, buttons, icon);
+                    return;
                 }
-                Thread installSQL = new Thread(() => InstallSQLServer(selectedService));
-                installSQL.Start();
+                string messageConfirm = "Are you sure you want to install \"" + selectedService + "\"? This process can take some time.";
+                string captionConfirm = "CONFIRM";
+                MessageBoxButtons buttonsConfirm = MessageBoxButtons.YesNo;
+                MessageBoxIcon iconConfirm = MessageBoxIcon.Question;
+                DialogResult resultConfirm;
+                resultConfirm = MessageBox.Show(messageConfirm, captionConfirm, buttonsConfirm, iconConfirm);
+
+                if (resultConfirm == DialogResult.Yes)
+                {
+                    switch (selectedService)
+                    {
+                        case "SQLSERVER2012":
+                            selectedService = "11";
+                            break;
+                        case "SQLSERVER2014":
+                            selectedService = "12";
+                            break;
+                        case "SQLSERVER2016":
+                            selectedService = "13";
+                            break;
+                        case "SQLSERVER2017":
+                            selectedService = "14";
+                            break;
+                        case "SQLSERVER2019":
+                            selectedService = "15";
+                            break;
+                    }
+                    Thread installSQL = new Thread(() => InstallSQLServer(selectedService));
+                    installSQL.Start();
+                }
+                return;
             }
-            return;
+            catch (ArgumentOutOfRangeException exError)
+            {
+                string errorMessage = "Please select a Service to install.";
+                string logMessage = "Index doesn't exist.";
+                ExceptionHandling.LogException(exError.ToString(), logMessage);
+                MessageBox.Show(errorMessage);
+                return;
+            }
         }
 
         private void btnStopAllServices_Click(object sender, EventArgs e)
@@ -989,22 +1010,14 @@ namespace EnvMgr
 
         private void btnRestoreDB_Click(object sender, EventArgs e)
         {
-            if (Control.ModifierKeys == Keys.Shift)
-            {
-                selectedGPVersion = cbSelectedGP.Text;
-                dbToRestore = cbDatabaseList.Text;
-                RestoreDB restoreDB = new RestoreDB(this);
-                restoreDB.Show();
-                return;
-            }
-            string selectedDB = cbDatabaseList.Text;
-            string gpVersion = cbSelectedGP.Text;
-            bool isDBSelected = IsDBSelected(selectedDB);
+            selectedGPVersion = cbSelectedGP.Text;
+            dbToRestore = cbDatabaseList.Text;
+            bool isDBSelected = IsDBSelected(dbToRestore);
             if (isDBSelected == false)
             {
                 return;
             }
-            string message = "Are you sure you want to restore \"" + selectedDB + "\" over your current environment?";
+            string message = "Are you sure you want to restore \"" + dbToRestore + "\" over your current environment?";
             string caption = "CONFIRM";
             MessageBoxButtons buttons = MessageBoxButtons.YesNo;
             MessageBoxIcon icon = MessageBoxIcon.Question;
@@ -1013,32 +1026,29 @@ namespace EnvMgr
             result = MessageBox.Show(message, caption, buttons, icon);
             if (result == DialogResult.Yes)
             {
-                Thread restoreDB = new Thread(() => RestoreDB(selectedDB, gpVersion));
-                restoreDB.Start();
+                RestoreDB restoreDB = new RestoreDB(this);
+                restoreDB.FormClosing += new FormClosingEventHandler(RestoreDBBackupFormClosing);
+                restoreDB.Show();
                 return;
             }
             return;
         }
+        private void RestoreDBBackupFormClosing(object sender, FormClosingEventArgs e)
+        {
+            selectedGPVersion = "";
+            dbToRestore = "";
+        }
 
         private void btnOverwriteDB_Click(object sender, EventArgs e)
         {
-            string selectedDB = cbDatabaseList.Text;
             dbToOverwrite = cbDatabaseList.Text;
             selectedGPVersion = cbSelectedGP.Text;
-            if (Control.ModifierKeys == Keys.Shift)
-            {
-                OverwriteBackupSelect overwriteBackupSelect = new OverwriteBackupSelect(this);
-                overwriteBackupSelect.Show();
-                //RestoreDB restoreDB = new RestoreDB(this);
-                //restoreDB.Show();
-                return;
-            }
-            bool isDBSelected = IsDBSelected(selectedDB);
+            bool isDBSelected = IsDBSelected(dbToOverwrite);
             if (isDBSelected == false)
             {
                 return;
             }
-            string Message = "Are you sure you want to overwrite the \"" + cbDatabaseList.Text + "\" backup with the current environment?";
+            string Message = "Are you sure you want to overwrite the \"" + dbToOverwrite + "\" backup with the current environment?";
             string Caption = "CONFIRM";
             MessageBoxButtons Buttons = MessageBoxButtons.YesNo;
             MessageBoxIcon Icon = MessageBoxIcon.Question;
@@ -1047,17 +1057,19 @@ namespace EnvMgr
             Result = MessageBox.Show(Message, Caption, Buttons, Icon);
             if (Result == DialogResult.Yes)
             {
-                dbToCreate = cbDatabaseList.Text;
-                OverwriteBackup overwriteBackupForm = new OverwriteBackup(this);
-                overwriteBackupForm.FormClosing += new FormClosingEventHandler(overwriteBackupFormClosing);
-                overwriteBackupForm.Show();
+                OverwriteBackupSelect overwriteBackupSelect = new OverwriteBackupSelect(this);
+                overwriteBackupSelect.FormClosing += new FormClosingEventHandler(overwriteBackupFormClosing);
+                overwriteBackupSelect.Show();
             }
+            return;
         }
         private void overwriteBackupFormClosing(object sender, FormClosingEventArgs e)
         {
             cbDatabaseList.Items.Clear();
             cbDatabaseList.Text = "Select a Database";
             tbDBDesc.Text = dbDescDefault;
+            dbToOverwrite = "";
+            selectedGPVersion = "";
             LoadDatabaseList();
         }
 
@@ -1069,13 +1081,6 @@ namespace EnvMgr
                 MessageBox.Show("Please select a GP version before creating a database backup.");
                 return;
             }
-            //if (Control.ModifierKeys == Keys.Shift)
-            //{
-            //    NewDBBackupSelect newDBBackupSelect = new NewDBBackupSelect(this);
-            //    newDBBackupSelect.FormClosing += new FormClosingEventHandler(ClosingNewDBBackup);
-            //    newDBBackupSelect.Show();
-            //    return;
-            //}
             string Message = "Are you sure you want to create a new Database Backup??";
             string Caption = "CONFIRM";
             MessageBoxButtons Buttons = MessageBoxButtons.YesNo;
@@ -1088,10 +1093,6 @@ namespace EnvMgr
                 NewDBBackupSelect newDBBackupSelect = new NewDBBackupSelect(this);
                 newDBBackupSelect.FormClosing += new FormClosingEventHandler(ClosingNewDBBackup);
                 newDBBackupSelect.Show();
-                //dbToCreate = cbDatabaseList.Text;
-                //NewDBBackup newDBBackup = new NewDBBackup(this);
-                //newDBBackup.FormClosing += new FormClosingEventHandler(ClosingNewDBBackup);
-                //newDBBackup.Show();
             }
             return;
         }
@@ -1103,6 +1104,7 @@ namespace EnvMgr
                 cbSelectedGP.Text = "Select GP";
                 cbDatabaseList.Text = "Select a Database";
                 tbDBDesc.Text = dbDescDefault;
+                selectedGPVersion = "";
                 return;
             }
             if (NewDBBackup.stopProcess == true)

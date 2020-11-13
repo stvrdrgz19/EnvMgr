@@ -48,6 +48,7 @@
             this.lbDatabaseList.FormattingEnabled = true;
             this.lbDatabaseList.Location = new System.Drawing.Point(5, 30);
             this.lbDatabaseList.Name = "lbDatabaseList";
+            this.lbDatabaseList.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
             this.lbDatabaseList.Size = new System.Drawing.Size(215, 95);
             this.lbDatabaseList.TabIndex = 1;
             // 

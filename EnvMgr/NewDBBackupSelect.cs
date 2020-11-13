@@ -25,43 +25,61 @@ namespace EnvMgr
             _form1 = form1;
         }
 
-        public void NewBackupThread(string sqlServ, string sqlUser, string sqlPassword, string dbPath, string[] selectedDBList, string bakName, string bakDescription)
+        public void NewBackupThread(string dbPath, string[] selectedDBList, string bakName, string bakDescription)
         {
             _form1.DisableDBControls(false);
-            foreach (string db in selectedDBList)
+            List<string> runningSQLServer = SQLManagement.GetRunningSQLServers();
+            if (runningSQLServer.Count > 1)
             {
-                try
+                MessageBox.Show("There are multiple sql servers running. Please stop any sql servers not being used. Environment Manager will target the remaining running sql server.");
+                _form1.DisableDBControls(true);
+                _form1.DisableSQLControls(true);
+                return;
+            }
+            if (runningSQLServer.Count == 0)
+            {
+                MessageBox.Show("There are no sql servers running. Please start a sql server and try again.");
+                _form1.DisableDBControls(true);
+                _form1.DisableSQLControls(true);
+                return;
+            }
+            foreach (string server in runningSQLServer)
+            {
+                foreach (string db in selectedDBList)
                 {
-                    SqlConnection sqlCon = new SqlConnection(@"Data Source=" + sqlServ + @";Initial Catalog=MASTER;User ID=" + sqlUser + @";Password=" + sqlPassword + @";");
-                    string backupScript = @"BACKUP DATABASE " + db + @" TO DISK='" + dbPath + "\\" + db + ".bak' WITH INIT";
-                    SqlDataAdapter sqlBackup = new SqlDataAdapter(backupScript, sqlCon);
-                    DataTable sqlBackupTable = new DataTable();
-                    sqlBackup.Fill(sqlBackupTable);
-                }
-                catch (SqlException e)
-                {
-                    Directory.Delete(dbPath, true);
-                    stopProcess = true;
-
-                    string errorMessage = "There was an error creating a new Database Backup. \n\nWould you like to view the exception?";
-                    string errorCaption = "ERROR";
-                    MessageBoxButtons errorButton = MessageBoxButtons.YesNo;
-                    MessageBoxIcon errorIcon = MessageBoxIcon.Error;
-                    DialogResult errorResult;
-
-                    errorResult = MessageBox.Show(errorMessage, errorCaption, errorButton, errorIcon);
-                    this.Close();
-
-                    if (errorResult == DialogResult.Yes)
+                    try
                     {
-                        _form1.DisableDBControls(true);
-                        MessageBox.Show(Convert.ToString(e));
-                        return;
+                        SqlConnection sqlCon = new SqlConnection(@"Data Source=" + Environment.MachineName + "\\" + server + @";Initial Catalog=MASTER;User ID=sa;Password=sa;");
+                        string backupScript = @"BACKUP DATABASE " + db + @" TO DISK='" + dbPath + "\\" + db + ".bak' WITH INIT";
+                        SqlDataAdapter sqlBackup = new SqlDataAdapter(backupScript, sqlCon);
+                        DataTable sqlBackupTable = new DataTable();
+                        sqlBackup.Fill(sqlBackupTable);
                     }
-                    if (errorResult == DialogResult.No)
+                    catch (SqlException e)
                     {
-                        _form1.DisableDBControls(true);
-                        return;
+                        Directory.Delete(dbPath, true);
+                        stopProcess = true;
+
+                        string errorMessage = "There was an error creating a new Database Backup. \n\nWould you like to view the exception?";
+                        string errorCaption = "ERROR";
+                        MessageBoxButtons errorButton = MessageBoxButtons.YesNo;
+                        MessageBoxIcon errorIcon = MessageBoxIcon.Error;
+                        DialogResult errorResult;
+
+                        errorResult = MessageBox.Show(errorMessage, errorCaption, errorButton, errorIcon);
+                        this.Close();
+
+                        if (errorResult == DialogResult.Yes)
+                        {
+                            _form1.DisableDBControls(true);
+                            MessageBox.Show(Convert.ToString(e));
+                            return;
+                        }
+                        if (errorResult == DialogResult.No)
+                        {
+                            _form1.DisableDBControls(true);
+                            return;
+                        }
                     }
                 }
             }
@@ -150,9 +168,9 @@ namespace EnvMgr
             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
             string dbFolderPath = Convert.ToString(key.GetValue("DB Folder"));
             string dbPath = Convert.ToString(key.GetValue("DB Folder")) + Form1.selectedGPVersion + "\\" + backupName;
-            string sqlServ = Convert.ToString(key.GetValue("SQL Server Name"));
-            string sqlUser = Convert.ToString(key.GetValue("SQL Username"));
-            string sqlPassword = Convert.ToString(key.GetValue("SQL Password"));
+            //string sqlServ = Convert.ToString(key.GetValue("SQL Server Name"));
+            //string sqlUser = Convert.ToString(key.GetValue("SQL Username"));
+            //string sqlPassword = Convert.ToString(key.GetValue("SQL Password"));
 
             if (Directory.Exists(dbPath))
             {
@@ -192,7 +210,7 @@ namespace EnvMgr
             {
                 listOfSelectedDBs.Add(database.ToString());
             }
-            Thread executeBackup = new Thread(() => NewBackupThread(sqlServ, sqlUser, sqlPassword, dbPath, listOfSelectedDBs.ToArray(), backupName, backupDescription));
+            Thread executeBackup = new Thread(() => NewBackupThread(dbPath, listOfSelectedDBs.ToArray(), backupName, backupDescription));
             executeBackup.Start();
             this.Close();
             return;
