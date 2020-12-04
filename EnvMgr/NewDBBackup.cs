@@ -25,23 +25,55 @@ namespace EnvMgr
             _form1 = form1;
         }
 
-        public void NewBackupThread(string sqlServ, string sqlUser, string sqlPassword, string dynamicsScript, string nonMBScript, string mbScript, string dbPath, string bakName, string bakDescription)
+        public void NewBackupThread(string dynamicsScript, string nonMBScript, string mbScript, string dbPath, string bakName, string bakDescription)
         {
             _form1.DisableDBControls(false);
             try
             {
-                SqlConnection sqlCon = new SqlConnection(@"Data Source=" + sqlServ + @";Initial Catalog=MASTER;User ID=" + sqlUser + @";Password=" + sqlPassword + @";");
-                SqlDataAdapter restoreDynScript = new SqlDataAdapter(dynamicsScript, sqlCon);
-                DataTable restoreDynTable = new DataTable();
-                restoreDynScript.Fill(restoreDynTable);
+                List<string> runningSQLServer = SQLManagement.GetRunningSQLServers();
+                if (runningSQLServer.Count > 1)
+                {
+                    MessageBox.Show("There are multiple sql servers running. Please stop any sql servers not being used. Environment Manager will target the remaining running sql server.");
+                    return;
+                }
+                if (runningSQLServer.Count == 0)
+                {
+                    MessageBox.Show("There are no sql servers running. Please start a sql server and try again.");
+                    return;
+                }
+                foreach (string server in runningSQLServer)
+                {
+                    try
+                    {
+                        Directory.Delete(dbPath, true);
+                    }
+                    catch (Exception e1)
+                    {
+                        MessageBox.Show("Failed deleting the selected db backup " + dbPath + "\n\n" + e1);
+                        return;
+                    }
+                    try
+                    {
+                        Directory.CreateDirectory(dbPath);
+                    }
+                    catch (Exception e2)
+                    {
+                        MessageBox.Show("Failed creating the following directory " + dbPath + "\n\n" + e2);
+                        return;
+                    }
+                    SqlConnection sqlCon = new SqlConnection(@"Data Source=" + Environment.MachineName + "\\" + server + @";Initial Catalog=MASTER;User ID=sa;Password=sa;");
+                    SqlDataAdapter restoreDynScript = new SqlDataAdapter(dynamicsScript, sqlCon);
+                    DataTable restoreDynTable = new DataTable();
+                    restoreDynScript.Fill(restoreDynTable);
 
-                SqlDataAdapter restoreNonMBScript = new SqlDataAdapter(nonMBScript, sqlCon);
-                DataTable restoreNonMBTable = new DataTable();
-                restoreNonMBScript.Fill(restoreNonMBTable);
+                    SqlDataAdapter restoreNonMBScript = new SqlDataAdapter(nonMBScript, sqlCon);
+                    DataTable restoreNonMBTable = new DataTable();
+                    restoreNonMBScript.Fill(restoreNonMBTable);
 
-                SqlDataAdapter restoreMBScript = new SqlDataAdapter(mbScript, sqlCon);
-                DataTable restoreMBTable = new DataTable();
-                restoreMBScript.Fill(restoreMBTable);
+                    SqlDataAdapter restoreMBScript = new SqlDataAdapter(mbScript, sqlCon);
+                    DataTable restoreMBTable = new DataTable();
+                    restoreMBScript.Fill(restoreMBTable);
+                }
             }
             catch (SqlException e)
             {
@@ -61,13 +93,12 @@ namespace EnvMgr
                 {
                     _form1.DisableDBControls(true);
                     MessageBox.Show(Convert.ToString(e));
-                    return;
                 }
                 if (errorResult == DialogResult.No)
                 {
                     _form1.DisableDBControls(true);
-                    return;
                 }
+                return;
             }
 
             using (StreamWriter sw = File.AppendText(dbPath + @"\Description.txt"))
@@ -140,9 +171,6 @@ namespace EnvMgr
 
             RegistryKey key2 = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
             string dbPath = Convert.ToString(key2.GetValue("DB Folder")) + Form1.selectedGPVersion + "\\" + backupName;
-            string sqlServ = Convert.ToString(key2.GetValue("SQL Server Name"));
-            string sqlUser = Convert.ToString(key2.GetValue("SQL Username"));
-            string sqlPassword = Convert.ToString(key2.GetValue("SQL Password"));
             string dynamicsDB = Convert.ToString(key2.GetValue("Dynamics Database"));
             string nonMBDB = Convert.ToString(key2.GetValue("Non-MB Database"));
             string mbDB = Convert.ToString(key2.GetValue("MB Database"));
@@ -152,7 +180,7 @@ namespace EnvMgr
             Directory.CreateDirectory(dbPath);
             this.Close();
 
-            Thread newDBBak = new Thread(() => NewBackupThread(sqlServ, sqlUser, sqlPassword, dynamicsScript, nonMBScript, mbScript, dbPath, backupName, backupDescription));
+            Thread newDBBak = new Thread(() => NewBackupThread(dynamicsScript, nonMBScript, mbScript, dbPath, backupName, backupDescription));
             newDBBak.Start();
             return;
         }

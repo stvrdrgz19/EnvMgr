@@ -54,32 +54,32 @@ namespace EnvMgr
                 sw.WriteLine("{" + DateTime.Now + "} - " + Product + ": " + fromLocation);
             }
 
+            RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
             if (Product == "SalesPad Mobile")
             {
                 Process.Start(toLocation + "\\SalesPad.GP.Mobile.Server.exe");
-                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
                 key.SetValue("zLastSPMobileInstall", fromLocation);
+                key.SetValue("zLastSPMobileInstallLocal", toLocation);
             }
             if (Product == "DataCollection")
             {
                 string DCLaunchPath = toLocation + "\\DataCollection Extended Warehouse.exe";
                 ExecuteAsAdmin(DCLaunchPath);
-                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
                 key.SetValue("zLastDCInstall", fromLocation);
+                key.SetValue("zLastDCInstallLocal", toLocation);
             }
             if (Product == "ShipCenter")
             {
                 Process.Start(toLocation + "\\SalesPad.ShipCenter.exe");
-                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
                 key.SetValue("zLastSCInstall", fromLocation);
+                key.SetValue("zLastSCInstallLocal", toLocation);
             }
             if (Product == "Card Control")
             {
                 Process.Start(toLocation + "\\CardControl.exe");
-                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
                 key.SetValue("zLastCCInstall", fromLocation);
+                key.SetValue("zLastCCInstallLocal", toLocation);
             }
-
             _form1.DisableInstallButton(true);
         }
 

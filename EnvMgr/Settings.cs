@@ -14,9 +14,7 @@ namespace EnvMgr
     public partial class Settings : Form
     {
         public static string startingDBFolder = "";
-        public static string startingServName = "";
-        public static string startingUserName = "";
-        public static string startingPassword = "";
+        public static bool startingDBMethod = false;
         public static string startingDynamics = "";
         public static string startingNonMB = "";
         public static string startingMB = "";
@@ -33,22 +31,14 @@ namespace EnvMgr
             InitializeComponent();
         }
 
-        public static bool CheckForUnsavedChanges(string dbBak, string SQLServer, string SQLUser, string SQLPassword, string dynamicsDB, string twoDB, string twombDB, string x86SP, string x64SP, string DC, string SPM, string SC, string tenantName)
+        public static bool CheckForUnsavedChanges(string dbBak, bool dbMethod, string dynamicsDB, string twoDB, string twombDB, string x86SP, string x64SP, string DC, string SPM, string SC, string tenantName)
         {
             bool changesMade = false;
             if (startingDBFolder != dbBak)
             {
                 changesMade = true;
             }
-            if (startingServName != SQLServer)
-            {
-                changesMade = true;
-            }
-            if (startingUserName != SQLUser)
-            {
-                changesMade = true;
-            }
-            if (startingPassword != SQLPassword)
+            if (startingDBMethod != dbMethod)
             {
                 changesMade = true;
             }
@@ -94,9 +84,7 @@ namespace EnvMgr
         private void SaveSettings()
         {
             string DBFolder = tbDBDirectory.Text;
-            string SQLServerName = tbSQLServerName.Text;
-            string SQLServerUsername = tbSQLServerUsername.Text;
-            string SQLServerPassword = tbSQLServerPassword.Text;
+            bool DBMethod = cbDBMethod.Checked;
             string DynamicsDB = tbDynamicsDB.Text;
             string NonMBDB = tbNonMBDB.Text;
             string MBDB = tbMBDB.Text;
@@ -107,9 +95,7 @@ namespace EnvMgr
             string SC = tbSCDirectory.Text;
             string TenantName = tbTenantName.Text;
             startingDBFolder = tbDBDirectory.Text;
-            startingServName = tbSQLServerName.Text;
-            startingUserName = tbSQLServerUsername.Text;
-            startingPassword = tbSQLServerPassword.Text;
+            startingDBMethod = cbDBMethod.Checked;
             startingDynamics = tbDynamicsDB.Text;
             startingNonMB = tbNonMBDB.Text;
             startingMB = tbMBDB.Text;
@@ -122,9 +108,7 @@ namespace EnvMgr
 
             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
             key.SetValue("DB Folder", DBFolder);
-            key.SetValue("SQL Server Name", SQLServerName);
-            key.SetValue("SQL Username", SQLServerUsername);
-            key.SetValue("SQL Password", SQLServerPassword);
+            key.SetValue("DB Method", DBMethod);
             key.SetValue("Dynamics Database", DynamicsDB);
             key.SetValue("Non-MB Database", NonMBDB);
             key.SetValue("MB Database", MBDB);
@@ -136,13 +120,21 @@ namespace EnvMgr
             key.SetValue("Tenant Name", TenantName);
         }
 
+        private void DBControlsEnabled(bool tf)
+        {
+            tbDynamicsDB.Enabled = tf;
+            tbNonMBDB.Enabled = tf;
+            tbMBDB.Enabled = tf;
+            btnDynamicsDB.Enabled = tf;
+            btnNonMBDB.Enabled = tf;
+            btnMBDB.Enabled = tf;
+        }
+
         private void Settings_Load(object sender, EventArgs e)
         {
             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
             tbDBDirectory.Text = Convert.ToString(key.GetValue("DB Folder"));
-            tbSQLServerName.Text = Convert.ToString(key.GetValue("SQL Server Name"));
-            tbSQLServerUsername.Text = Convert.ToString(key.GetValue("SQL Username"));
-            tbSQLServerPassword.Text = Convert.ToString(key.GetValue("SQL Password"));
+            cbDBMethod.Checked = Convert.ToBoolean(key.GetValue("DB Method"));
             tbDynamicsDB.Text = Convert.ToString(key.GetValue("Dynamics Database"));
             tbNonMBDB.Text = Convert.ToString(key.GetValue("Non-MB Database"));
             tbMBDB.Text = Convert.ToString(key.GetValue("MB Database"));
@@ -154,9 +146,7 @@ namespace EnvMgr
             tbTenantName.Text = Convert.ToString(key.GetValue("Tenant Name"));
 
             startingDBFolder = tbDBDirectory.Text;
-            startingServName = tbSQLServerName.Text;
-            startingUserName = tbSQLServerUsername.Text;
-            startingPassword = tbSQLServerPassword.Text;
+            startingDBMethod = cbDBMethod.Checked;
             startingDynamics = tbDynamicsDB.Text;
             startingNonMB = tbNonMBDB.Text;
             startingMB = tbMBDB.Text;
@@ -166,6 +156,12 @@ namespace EnvMgr
             startingSPM = tbSPMDirectory.Text;
             startingSC = tbSCDirectory.Text;
             startingTenantName = tbTenantName.Text;
+
+            if (cbDBMethod.Checked)
+            {
+                DBControlsEnabled(false);
+            }
+            return;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -176,7 +172,7 @@ namespace EnvMgr
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-            bool changesMade = CheckForUnsavedChanges(tbDBDirectory.Text, tbSQLServerName.Text, tbSQLServerUsername.Text, tbSQLServerPassword.Text, tbDynamicsDB.Text, tbNonMBDB.Text, tbMBDB.Text, tbSPGPx86Directory.Text, tbSPGPx64Directory.Text, tbDCDirectory.Text, tbSPMDirectory.Text, tbSCDirectory.Text, tbTenantName.Text);
+            bool changesMade = CheckForUnsavedChanges(tbDBDirectory.Text, cbDBMethod.Checked, tbDynamicsDB.Text, tbNonMBDB.Text, tbMBDB.Text, tbSPGPx86Directory.Text, tbSPGPx64Directory.Text, tbDCDirectory.Text, tbSPMDirectory.Text, tbSCDirectory.Text, tbTenantName.Text);
             if (changesMade == true)
             {
                 string saveChangesMessage = "There are un-saved changes, do you want to save these changes?";
@@ -189,9 +185,7 @@ namespace EnvMgr
                 if (saveChangesResult == DialogResult.Yes)
                 {
                     string DBFolder = tbDBDirectory.Text;
-                    string SQLServerName = tbSQLServerName.Text;
-                    string SQLServerUsername = tbSQLServerUsername.Text;
-                    string SQLServerPassword = tbSQLServerPassword.Text;
+                    bool DBMethod = cbDBMethod.Checked;
                     string DynamicsDB = tbDynamicsDB.Text;
                     string NonMBDB = tbNonMBDB.Text;
                     string MBDB = tbMBDB.Text;
@@ -204,9 +198,7 @@ namespace EnvMgr
 
                     RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
                     key.SetValue("DB Folder", DBFolder);
-                    key.SetValue("SQL Server Name", SQLServerName);
-                    key.SetValue("SQL Username", SQLServerUsername);
-                    key.SetValue("SQL Password", SQLServerPassword);
+                    key.SetValue("DB Method", DBMethod);
                     key.SetValue("Dynamics Database", DynamicsDB);
                     key.SetValue("Non-MB Database", NonMBDB);
                     key.SetValue("MB Database", MBDB);
@@ -244,57 +236,6 @@ namespace EnvMgr
                     return;
                 }
             }
-        }
-
-        private void btnSQLServerName_Click(object sender, EventArgs e)
-        {
-            settingValToSend = tbSQLServerName.Text;
-            SettingsPop SettingsPop = new SettingsPop();
-            SettingsPop.FormClosing += new FormClosingEventHandler(SQLServerNameClose);
-            SettingsPop.Show();
-        }
-        private void SQLServerNameClose(object sender, FormClosingEventArgs e)
-        {
-            if (String.IsNullOrWhiteSpace(SettingsPop.newSettingValue) || SettingsPop.cancelPressed == true)
-            {
-                return;
-            }
-            tbSQLServerName.Text = SettingsPop.newSettingValue;
-            return;
-        }
-
-        private void btnSQLUsername_Click(object sender, EventArgs e)
-        {
-            settingValToSend = tbSQLServerUsername.Text;
-            SettingsPop SettingsPop = new SettingsPop();
-            SettingsPop.FormClosing += new FormClosingEventHandler(SQLServerUserameClose);
-            SettingsPop.Show();
-        }
-        private void SQLServerUserameClose(object sender, FormClosingEventArgs e)
-        {
-            if (String.IsNullOrWhiteSpace(SettingsPop.newSettingValue) || SettingsPop.cancelPressed == true)
-            {
-                return;
-            }
-            tbSQLServerUsername.Text = SettingsPop.newSettingValue;
-            return;
-        }
-
-        private void btnSQLPassword_Click(object sender, EventArgs e)
-        {
-            settingValToSend = tbSQLServerPassword.Text;
-            SettingsPop SettingsPop = new SettingsPop();
-            SettingsPop.FormClosing += new FormClosingEventHandler(SQLServerPasswordClose);
-            SettingsPop.Show();
-        }
-        private void SQLServerPasswordClose(object sender, FormClosingEventArgs e)
-        {
-            if (String.IsNullOrWhiteSpace(SettingsPop.newSettingValue) || SettingsPop.cancelPressed == true)
-            {
-                return;
-            }
-            tbSQLServerPassword.Text = SettingsPop.newSettingValue;
-            return;
         }
 
         private void btnDynamicsDB_Click(object sender, EventArgs e)
@@ -436,7 +377,7 @@ namespace EnvMgr
 
         private void btnExport_Click(object sender, EventArgs e)
         {
-            bool unsavedChanges = CheckForUnsavedChanges(tbDBDirectory.Text, tbSQLServerName.Text, tbSQLServerUsername.Text, tbSQLServerPassword.Text, tbDynamicsDB.Text, tbNonMBDB.Text, tbMBDB.Text, tbSPGPx86Directory.Text, tbSPGPx64Directory.Text, tbDCDirectory.Text, tbSPMDirectory.Text, tbSCDirectory.Text, tbTenantName.Text);
+            bool unsavedChanges = CheckForUnsavedChanges(tbDBDirectory.Text, cbDBMethod.Checked, tbDynamicsDB.Text, tbNonMBDB.Text, tbMBDB.Text, tbSPGPx86Directory.Text, tbSPGPx64Directory.Text, tbDCDirectory.Text, tbSPMDirectory.Text, tbSCDirectory.Text, tbTenantName.Text);
             if (unsavedChanges == true)
             {
                 string message = "You must save changes made to Settings before Exporting. Do you want to Save and Export?";
@@ -469,6 +410,19 @@ namespace EnvMgr
                 //Code the Settings Import stuff
             }
             //Save here or reword the prompt.
+            return;
+        }
+
+        private void cbDBMethod_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbDBMethod.Checked)
+            {
+                DBControlsEnabled(false);
+            }
+            if (!cbDBMethod.Checked)
+            {
+                DBControlsEnabled(true);
+            }
             return;
         }
     }

@@ -617,9 +617,9 @@ namespace EnvMgr
             DisableSQLControls(false);
             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
             string dbPath = Convert.ToString(key.GetValue("DB Folder")) + gpVersion + "\\" + dbName;
-            string sqlServ = Convert.ToString(key.GetValue("SQL Server Name"));
-            string sqlUser = Convert.ToString(key.GetValue("SQL Username"));
-            string sqlPassword = Convert.ToString(key.GetValue("SQL Password"));
+            //string sqlServ = Convert.ToString(key.GetValue("SQL Server Name"));
+            //string sqlUser = Convert.ToString(key.GetValue("SQL Username"));
+            //string sqlPassword = Convert.ToString(key.GetValue("SQL Password"));
             string dynamicsDB = Convert.ToString(key.GetValue("Dynamics Database"));
             string nonMBDB = Convert.ToString(key.GetValue("Non-MB Database"));
             string mbDB = Convert.ToString(key.GetValue("MB Database"));
@@ -629,18 +629,44 @@ namespace EnvMgr
 
             try
             {
-                SqlConnection sqlCon = new SqlConnection(@"Data Source=" + sqlServ + @";Initial Catalog=MASTER;User ID=" + sqlUser + @";Password=" + sqlPassword + @";");
-                SqlDataAdapter restoreDynScript = new SqlDataAdapter(dynamicsScript, sqlCon);
-                DataTable restoreDynTable = new DataTable();
-                restoreDynScript.Fill(restoreDynTable);
+                List<string> runningSQLServer = SQLManagement.GetRunningSQLServers();
+                if (runningSQLServer.Count > 1)
+                {
+                    MessageBox.Show("There are multiple sql servers running. Please stop any sql servers not being used. Environment Manager will target the remaining running sql server.");
+                    return;
+                }
+                if (runningSQLServer.Count == 0)
+                {
+                    MessageBox.Show("There are no sql servers running. Please start a sql server and try again.");
+                    return;
+                }
+                foreach (string server in runningSQLServer)
+                {
+                    SqlConnection sqlCon = new SqlConnection(@"Data Source=" + Environment.MachineName + "\\" + server + @";Initial Catalog=MASTER;User ID=sa;Password=sa;");
+                    SqlDataAdapter restoreDynScript = new SqlDataAdapter(dynamicsScript, sqlCon);
+                    DataTable restoreDynTable = new DataTable();
+                    restoreDynScript.Fill(restoreDynTable);
 
-                SqlDataAdapter restoreNonMBScript = new SqlDataAdapter(nonMBScript, sqlCon);
-                DataTable restoreNonMBTable = new DataTable();
-                restoreNonMBScript.Fill(restoreNonMBTable);
+                    SqlDataAdapter restoreNonMBScript = new SqlDataAdapter(nonMBScript, sqlCon);
+                    DataTable restoreNonMBTable = new DataTable();
+                    restoreNonMBScript.Fill(restoreNonMBTable);
 
-                SqlDataAdapter restoreMBScript = new SqlDataAdapter(mbScript, sqlCon);
-                DataTable restoreMBTable = new DataTable();
-                restoreMBScript.Fill(restoreMBTable);
+                    SqlDataAdapter restoreMBScript = new SqlDataAdapter(mbScript, sqlCon);
+                    DataTable restoreMBTable = new DataTable();
+                    restoreMBScript.Fill(restoreMBTable);
+                }
+                //SqlConnection sqlCon = new SqlConnection(@"Data Source=" + sqlServ + @";Initial Catalog=MASTER;User ID=" + sqlUser + @";Password=" + sqlPassword + @";");
+                //SqlDataAdapter restoreDynScript = new SqlDataAdapter(dynamicsScript, sqlCon);
+                //DataTable restoreDynTable = new DataTable();
+                //restoreDynScript.Fill(restoreDynTable);
+
+                //SqlDataAdapter restoreNonMBScript = new SqlDataAdapter(nonMBScript, sqlCon);
+                //DataTable restoreNonMBTable = new DataTable();
+                //restoreNonMBScript.Fill(restoreNonMBTable);
+
+                //SqlDataAdapter restoreMBScript = new SqlDataAdapter(mbScript, sqlCon);
+                //DataTable restoreMBTable = new DataTable();
+                //restoreMBScript.Fill(restoreMBTable);
             }
             catch (SqlException)
             {
@@ -1026,10 +1052,20 @@ namespace EnvMgr
             result = MessageBox.Show(message, caption, buttons, icon);
             if (result == DialogResult.Yes)
             {
-                RestoreDB restoreDB = new RestoreDB(this);
-                restoreDB.FormClosing += new FormClosingEventHandler(RestoreDBBackupFormClosing);
-                restoreDB.Show();
-                return;
+                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
+                bool DBMethod = Convert.ToBoolean(key.GetValue("DB Method"));
+                if (DBMethod)
+                {
+                    RestoreDB restoreDB = new RestoreDB(this);
+                    restoreDB.FormClosing += new FormClosingEventHandler(RestoreDBBackupFormClosing);
+                    restoreDB.Show();
+                }
+                if (!DBMethod)
+                {
+                    Thread restoreDB = new Thread(() => RestoreDB(dbToRestore, selectedGPVersion));
+                    restoreDB.Start();
+                    return;
+                }
             }
             return;
         }
@@ -1057,9 +1093,20 @@ namespace EnvMgr
             Result = MessageBox.Show(Message, Caption, Buttons, Icon);
             if (Result == DialogResult.Yes)
             {
-                OverwriteBackupSelect overwriteBackupSelect = new OverwriteBackupSelect(this);
-                overwriteBackupSelect.FormClosing += new FormClosingEventHandler(overwriteBackupFormClosing);
-                overwriteBackupSelect.Show();
+                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
+                bool DBMethod = Convert.ToBoolean(key.GetValue("DB Method"));
+                if (DBMethod)
+                {
+                    OverwriteBackupSelect overwriteBackupSelect = new OverwriteBackupSelect(this);
+                    overwriteBackupSelect.FormClosing += new FormClosingEventHandler(overwriteBackupFormClosing);
+                    overwriteBackupSelect.Show();
+                }
+                if (!DBMethod)
+                {
+                    OverwriteBackup overwriteBackup = new OverwriteBackup(this);
+                    overwriteBackup.FormClosing += new FormClosingEventHandler(overwriteBackupFormClosing);
+                    overwriteBackup.Show();
+                }
             }
             return;
         }
@@ -1090,9 +1137,20 @@ namespace EnvMgr
             Result = MessageBox.Show(Message, Caption, Buttons, Icon);
             if (Result == DialogResult.Yes)
             {
-                NewDBBackupSelect newDBBackupSelect = new NewDBBackupSelect(this);
-                newDBBackupSelect.FormClosing += new FormClosingEventHandler(ClosingNewDBBackup);
-                newDBBackupSelect.Show();
+                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
+                bool DBMethod = Convert.ToBoolean(key.GetValue("DB Method"));
+                if (DBMethod)
+                {
+                    NewDBBackupSelect newDBBackupSelect = new NewDBBackupSelect(this);
+                    newDBBackupSelect.FormClosing += new FormClosingEventHandler(ClosingNewDBBackup);
+                    newDBBackupSelect.Show();
+                }
+                if (!DBMethod)
+                {
+                    NewDBBackup newDBBackup = new NewDBBackup(this);
+                    newDBBackup.FormClosing += new FormClosingEventHandler(ClosingNewDBBackup);
+                    newDBBackup.Show();
+                }
             }
             return;
         }
@@ -1170,17 +1228,14 @@ namespace EnvMgr
 
         private void btnInstallProduct_Click(object sender, EventArgs e)
         {
-
+            string product = cbProductList.Text;
+            selectedProductVersion = cbSPGPVersion.Text;
             if (Control.ModifierKeys == Keys.Shift)
             {
                 LastInstalled lastInstalled = new LastInstalled();
                 lastInstalled.Show();
                 return;
             }
-
-            string product = cbProductList.Text;
-            selectedProductVersion = cbSPGPVersion.Text;
-
             if (product == "Select a Product")
             {
                 string errorMessage = "Please select a Product.";
@@ -1190,6 +1245,46 @@ namespace EnvMgr
                 DialogResult errorResult;
 
                 errorResult = MessageBox.Show(errorMessage, errorCaption, errorButton, errorIcon);
+                return;
+            }
+            if (Control.ModifierKeys == Keys.Control)
+            {
+                string productPath = "";
+                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
+                if (product == "SalesPad Desktop")
+                {
+                    productPath = Convert.ToString(key.GetValue("zLastSPGPInstallLocal")) + @"\SalesPad.exe";
+                }
+                if (product == "DataCollection")
+                {
+                    productPath = Convert.ToString(key.GetValue("zLastDCInstallLocal")) + @"\DataCollection Extended Warehouse.exe";
+                }
+                if (product == "SalesPad Mobile")
+                {
+                    productPath = Convert.ToString(key.GetValue("zLastSPMobileInstallLocal")) + @"\SalesPad.GP.Mobile.Server.exe";
+                }
+                if (product == "ShipCenter")
+                {
+                    productPath = Convert.ToString(key.GetValue("zLastSCInstallLocal")) + @"\SalesPad.ShipCenter.exe";
+                }
+                string message = "Are you sure you want to launch " + productPath + "?";
+                string caption = "CONFIRM";
+                MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+                MessageBoxIcon icon = MessageBoxIcon.Question;
+                DialogResult result;
+
+                result = MessageBox.Show(message, caption, buttons, icon);
+                if (result == DialogResult.Yes)
+                {
+                    try
+                    {
+                        Process.Start(productPath);
+                    }
+                    catch
+                    {
+                        return;
+                    }
+                }
                 return;
             }
             else if (product == "SalesPad Desktop")

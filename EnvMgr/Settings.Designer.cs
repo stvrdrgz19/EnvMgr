@@ -30,27 +30,19 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
             this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.tbDBDirectory = new System.Windows.Forms.TextBox();
-            this.tbSQLServerName = new System.Windows.Forms.TextBox();
             this.btnDBBackupDirectory = new System.Windows.Forms.Button();
-            this.btnSQLServerName = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.tbSQLServerUsername = new System.Windows.Forms.TextBox();
-            this.tbSQLServerPassword = new System.Windows.Forms.TextBox();
-            this.btnSQLUsername = new System.Windows.Forms.Button();
-            this.btnSQLPassword = new System.Windows.Forms.Button();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.tbDynamicsDB = new System.Windows.Forms.TextBox();
-            this.tbNonMBDB = new System.Windows.Forms.TextBox();
-            this.btnDynamicsDB = new System.Windows.Forms.Button();
-            this.btnNonMBDB = new System.Windows.Forms.Button();
-            this.label7 = new System.Windows.Forms.Label();
-            this.tbMBDB = new System.Windows.Forms.TextBox();
-            this.btnMBDB = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnMBDB = new System.Windows.Forms.Button();
+            this.tbMBDB = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.btnNonMBDB = new System.Windows.Forms.Button();
+            this.tbNonMBDB = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.btnDynamicsDB = new System.Windows.Forms.Button();
+            this.tbDynamicsDB = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.cbDBMethod = new System.Windows.Forms.CheckBox();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -89,15 +81,6 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "DB Backup Folder: ";
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 44);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(99, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "SQL Server Name: ";
-            // 
             // tbDBDirectory
             // 
             this.tbDBDirectory.Location = new System.Drawing.Point(109, 18);
@@ -105,14 +88,6 @@
             this.tbDBDirectory.ReadOnly = true;
             this.tbDBDirectory.Size = new System.Drawing.Size(282, 20);
             this.tbDBDirectory.TabIndex = 2;
-            // 
-            // tbSQLServerName
-            // 
-            this.tbSQLServerName.Location = new System.Drawing.Point(109, 42);
-            this.tbSQLServerName.Name = "tbSQLServerName";
-            this.tbSQLServerName.ReadOnly = true;
-            this.tbSQLServerName.Size = new System.Drawing.Size(282, 20);
-            this.tbSQLServerName.TabIndex = 3;
             // 
             // btnDBBackupDirectory
             // 
@@ -124,185 +99,123 @@
             this.btnDBBackupDirectory.UseVisualStyleBackColor = true;
             this.btnDBBackupDirectory.Click += new System.EventHandler(this.btnDBBackupDirectory_Click);
             // 
-            // btnSQLServerName
-            // 
-            this.btnSQLServerName.Location = new System.Drawing.Point(392, 41);
-            this.btnSQLServerName.Name = "btnSQLServerName";
-            this.btnSQLServerName.Size = new System.Drawing.Size(24, 22);
-            this.btnSQLServerName.TabIndex = 5;
-            this.btnSQLServerName.Text = "...";
-            this.btnSQLServerName.UseVisualStyleBackColor = true;
-            this.btnSQLServerName.Click += new System.EventHandler(this.btnSQLServerName_Click);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(7, 67);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(82, 13);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "SQL Username:";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(7, 91);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(80, 13);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "SQL Password:";
-            // 
-            // tbSQLServerUsername
-            // 
-            this.tbSQLServerUsername.Location = new System.Drawing.Point(109, 65);
-            this.tbSQLServerUsername.Name = "tbSQLServerUsername";
-            this.tbSQLServerUsername.ReadOnly = true;
-            this.tbSQLServerUsername.Size = new System.Drawing.Size(282, 20);
-            this.tbSQLServerUsername.TabIndex = 8;
-            // 
-            // tbSQLServerPassword
-            // 
-            this.tbSQLServerPassword.Location = new System.Drawing.Point(109, 89);
-            this.tbSQLServerPassword.Name = "tbSQLServerPassword";
-            this.tbSQLServerPassword.PasswordChar = '*';
-            this.tbSQLServerPassword.ReadOnly = true;
-            this.tbSQLServerPassword.Size = new System.Drawing.Size(282, 20);
-            this.tbSQLServerPassword.TabIndex = 9;
-            // 
-            // btnSQLUsername
-            // 
-            this.btnSQLUsername.Location = new System.Drawing.Point(392, 64);
-            this.btnSQLUsername.Name = "btnSQLUsername";
-            this.btnSQLUsername.Size = new System.Drawing.Size(24, 22);
-            this.btnSQLUsername.TabIndex = 10;
-            this.btnSQLUsername.Text = "...";
-            this.btnSQLUsername.UseVisualStyleBackColor = true;
-            this.btnSQLUsername.Click += new System.EventHandler(this.btnSQLUsername_Click);
-            // 
-            // btnSQLPassword
-            // 
-            this.btnSQLPassword.Location = new System.Drawing.Point(392, 88);
-            this.btnSQLPassword.Name = "btnSQLPassword";
-            this.btnSQLPassword.Size = new System.Drawing.Size(24, 22);
-            this.btnSQLPassword.TabIndex = 11;
-            this.btnSQLPassword.Text = "...";
-            this.btnSQLPassword.UseVisualStyleBackColor = true;
-            this.btnSQLPassword.Click += new System.EventHandler(this.btnSQLPassword_Click);
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(7, 115);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(105, 13);
-            this.label6.TabIndex = 12;
-            this.label6.Text = "Dynamics Database:";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(7, 139);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(98, 13);
-            this.label5.TabIndex = 13;
-            this.label5.Text = "Non-MB Database:";
-            // 
-            // tbDynamicsDB
-            // 
-            this.tbDynamicsDB.Location = new System.Drawing.Point(109, 113);
-            this.tbDynamicsDB.Name = "tbDynamicsDB";
-            this.tbDynamicsDB.ReadOnly = true;
-            this.tbDynamicsDB.Size = new System.Drawing.Size(282, 20);
-            this.tbDynamicsDB.TabIndex = 14;
-            // 
-            // tbNonMBDB
-            // 
-            this.tbNonMBDB.Location = new System.Drawing.Point(109, 137);
-            this.tbNonMBDB.Name = "tbNonMBDB";
-            this.tbNonMBDB.ReadOnly = true;
-            this.tbNonMBDB.Size = new System.Drawing.Size(282, 20);
-            this.tbNonMBDB.TabIndex = 15;
-            // 
-            // btnDynamicsDB
-            // 
-            this.btnDynamicsDB.Location = new System.Drawing.Point(392, 112);
-            this.btnDynamicsDB.Name = "btnDynamicsDB";
-            this.btnDynamicsDB.Size = new System.Drawing.Size(24, 22);
-            this.btnDynamicsDB.TabIndex = 16;
-            this.btnDynamicsDB.Text = "...";
-            this.btnDynamicsDB.UseVisualStyleBackColor = true;
-            this.btnDynamicsDB.Click += new System.EventHandler(this.btnDynamicsDB_Click);
-            // 
-            // btnNonMBDB
-            // 
-            this.btnNonMBDB.Location = new System.Drawing.Point(392, 136);
-            this.btnNonMBDB.Name = "btnNonMBDB";
-            this.btnNonMBDB.Size = new System.Drawing.Size(24, 22);
-            this.btnNonMBDB.TabIndex = 17;
-            this.btnNonMBDB.Text = "...";
-            this.btnNonMBDB.UseVisualStyleBackColor = true;
-            this.btnNonMBDB.Click += new System.EventHandler(this.btnNonMBDB_Click);
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(7, 163);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(75, 13);
-            this.label7.TabIndex = 18;
-            this.label7.Text = "MB Database:";
-            // 
-            // tbMBDB
-            // 
-            this.tbMBDB.Location = new System.Drawing.Point(109, 161);
-            this.tbMBDB.Name = "tbMBDB";
-            this.tbMBDB.ReadOnly = true;
-            this.tbMBDB.Size = new System.Drawing.Size(282, 20);
-            this.tbMBDB.TabIndex = 19;
-            // 
-            // btnMBDB
-            // 
-            this.btnMBDB.Location = new System.Drawing.Point(392, 160);
-            this.btnMBDB.Name = "btnMBDB";
-            this.btnMBDB.Size = new System.Drawing.Size(24, 22);
-            this.btnMBDB.TabIndex = 20;
-            this.btnMBDB.Text = "...";
-            this.btnMBDB.UseVisualStyleBackColor = true;
-            this.btnMBDB.Click += new System.EventHandler(this.btnMBDB_Click);
-            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.btnMBDB);
             this.groupBox1.Controls.Add(this.tbMBDB);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.btnNonMBDB);
-            this.groupBox1.Controls.Add(this.btnDynamicsDB);
             this.groupBox1.Controls.Add(this.tbNonMBDB);
-            this.groupBox1.Controls.Add(this.tbDynamicsDB);
-            this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.label6);
-            this.groupBox1.Controls.Add(this.btnSQLPassword);
-            this.groupBox1.Controls.Add(this.btnSQLUsername);
-            this.groupBox1.Controls.Add(this.tbSQLServerPassword);
-            this.groupBox1.Controls.Add(this.tbSQLServerUsername);
-            this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Controls.Add(this.btnSQLServerName);
-            this.groupBox1.Controls.Add(this.btnDBBackupDirectory);
-            this.groupBox1.Controls.Add(this.tbSQLServerName);
-            this.groupBox1.Controls.Add(this.tbDBDirectory);
             this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.btnDynamicsDB);
+            this.groupBox1.Controls.Add(this.tbDynamicsDB);
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.cbDBMethod);
+            this.groupBox1.Controls.Add(this.btnDBBackupDirectory);
+            this.groupBox1.Controls.Add(this.tbDBDirectory);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(2, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(422, 191);
+            this.groupBox1.Size = new System.Drawing.Size(422, 135);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Database Management";
             // 
+            // btnMBDB
+            // 
+            this.btnMBDB.Location = new System.Drawing.Point(392, 109);
+            this.btnMBDB.Name = "btnMBDB";
+            this.btnMBDB.Size = new System.Drawing.Size(24, 22);
+            this.btnMBDB.TabIndex = 49;
+            this.btnMBDB.Text = "...";
+            this.btnMBDB.UseVisualStyleBackColor = true;
+            this.btnMBDB.Click += new System.EventHandler(this.btnMBDB_Click);
+            // 
+            // tbMBDB
+            // 
+            this.tbMBDB.Location = new System.Drawing.Point(109, 110);
+            this.tbMBDB.Name = "tbMBDB";
+            this.tbMBDB.ReadOnly = true;
+            this.tbMBDB.Size = new System.Drawing.Size(282, 20);
+            this.tbMBDB.TabIndex = 48;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(7, 112);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(75, 13);
+            this.label7.TabIndex = 47;
+            this.label7.Text = "MB Database:";
+            // 
+            // btnNonMBDB
+            // 
+            this.btnNonMBDB.Location = new System.Drawing.Point(392, 85);
+            this.btnNonMBDB.Name = "btnNonMBDB";
+            this.btnNonMBDB.Size = new System.Drawing.Size(24, 22);
+            this.btnNonMBDB.TabIndex = 46;
+            this.btnNonMBDB.Text = "...";
+            this.btnNonMBDB.UseVisualStyleBackColor = true;
+            this.btnNonMBDB.Click += new System.EventHandler(this.btnNonMBDB_Click);
+            // 
+            // tbNonMBDB
+            // 
+            this.tbNonMBDB.Location = new System.Drawing.Point(109, 86);
+            this.tbNonMBDB.Name = "tbNonMBDB";
+            this.tbNonMBDB.ReadOnly = true;
+            this.tbNonMBDB.Size = new System.Drawing.Size(282, 20);
+            this.tbNonMBDB.TabIndex = 45;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(7, 88);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(98, 13);
+            this.label2.TabIndex = 44;
+            this.label2.Text = "Non-MB Database:";
+            // 
+            // btnDynamicsDB
+            // 
+            this.btnDynamicsDB.Location = new System.Drawing.Point(392, 61);
+            this.btnDynamicsDB.Name = "btnDynamicsDB";
+            this.btnDynamicsDB.Size = new System.Drawing.Size(24, 22);
+            this.btnDynamicsDB.TabIndex = 43;
+            this.btnDynamicsDB.Text = "...";
+            this.btnDynamicsDB.UseVisualStyleBackColor = true;
+            this.btnDynamicsDB.Click += new System.EventHandler(this.btnDynamicsDB_Click);
+            // 
+            // tbDynamicsDB
+            // 
+            this.tbDynamicsDB.Location = new System.Drawing.Point(109, 62);
+            this.tbDynamicsDB.Name = "tbDynamicsDB";
+            this.tbDynamicsDB.ReadOnly = true;
+            this.tbDynamicsDB.Size = new System.Drawing.Size(282, 20);
+            this.tbDynamicsDB.TabIndex = 41;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(7, 64);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(105, 13);
+            this.label3.TabIndex = 39;
+            this.label3.Text = "Dynamics Database:";
+            // 
+            // cbDBMethod
+            // 
+            this.cbDBMethod.AutoSize = true;
+            this.cbDBMethod.Location = new System.Drawing.Point(10, 44);
+            this.cbDBMethod.Name = "cbDBMethod";
+            this.cbDBMethod.Size = new System.Drawing.Size(299, 17);
+            this.cbDBMethod.TabIndex = 5;
+            this.cbDBMethod.Text = "Manually Select Databases to Backup/Restore/Overwrite";
+            this.cbDBMethod.UseVisualStyleBackColor = true;
+            this.cbDBMethod.CheckedChanged += new System.EventHandler(this.cbDBMethod_CheckedChanged);
+            // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(273, 401);
+            this.btnSave.Location = new System.Drawing.Point(273, 344);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 4;
@@ -312,7 +225,7 @@
             // 
             // btnExit
             // 
-            this.btnExit.Location = new System.Drawing.Point(350, 401);
+            this.btnExit.Location = new System.Drawing.Point(350, 344);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 23);
             this.btnExit.TabIndex = 5;
@@ -337,7 +250,7 @@
             this.groupBox2.Controls.Add(this.tbSPGPx86Directory);
             this.groupBox2.Controls.Add(this.label11);
             this.groupBox2.Controls.Add(this.label12);
-            this.groupBox2.Location = new System.Drawing.Point(2, 201);
+            this.groupBox2.Location = new System.Drawing.Point(2, 144);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(422, 142);
             this.groupBox2.TabIndex = 6;
@@ -481,7 +394,7 @@
             // 
             // btnExport
             // 
-            this.btnExport.Location = new System.Drawing.Point(80, 401);
+            this.btnExport.Location = new System.Drawing.Point(80, 344);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(75, 23);
             this.btnExport.TabIndex = 8;
@@ -491,7 +404,7 @@
             // 
             // btnImport
             // 
-            this.btnImport.Location = new System.Drawing.Point(3, 401);
+            this.btnImport.Location = new System.Drawing.Point(3, 344);
             this.btnImport.Name = "btnImport";
             this.btnImport.Size = new System.Drawing.Size(75, 23);
             this.btnImport.TabIndex = 7;
@@ -504,7 +417,7 @@
             this.groupBox3.Controls.Add(this.btnTenantName);
             this.groupBox3.Controls.Add(this.tbTenantName);
             this.groupBox3.Controls.Add(this.label13);
-            this.groupBox3.Location = new System.Drawing.Point(2, 350);
+            this.groupBox3.Location = new System.Drawing.Point(2, 293);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(422, 48);
             this.groupBox3.TabIndex = 9;
@@ -542,7 +455,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(427, 427);
+            this.ClientSize = new System.Drawing.Size(427, 370);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.btnExport);
             this.Controls.Add(this.btnImport);
@@ -569,26 +482,8 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox tbDBDirectory;
-        private System.Windows.Forms.TextBox tbSQLServerName;
         private System.Windows.Forms.Button btnDBBackupDirectory;
-        private System.Windows.Forms.Button btnSQLServerName;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox tbSQLServerUsername;
-        private System.Windows.Forms.TextBox tbSQLServerPassword;
-        private System.Windows.Forms.Button btnSQLUsername;
-        private System.Windows.Forms.Button btnSQLPassword;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox tbDynamicsDB;
-        private System.Windows.Forms.TextBox tbNonMBDB;
-        private System.Windows.Forms.Button btnDynamicsDB;
-        private System.Windows.Forms.Button btnNonMBDB;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox tbMBDB;
-        private System.Windows.Forms.Button btnMBDB;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnExit;
@@ -614,5 +509,15 @@
         private System.Windows.Forms.Button btnTenantName;
         private System.Windows.Forms.TextBox tbTenantName;
         private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.CheckBox cbDBMethod;
+        private System.Windows.Forms.Button btnMBDB;
+        private System.Windows.Forms.TextBox tbMBDB;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button btnNonMBDB;
+        private System.Windows.Forms.TextBox tbNonMBDB;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button btnDynamicsDB;
+        private System.Windows.Forms.TextBox tbDynamicsDB;
+        private System.Windows.Forms.Label label3;
     }
 }

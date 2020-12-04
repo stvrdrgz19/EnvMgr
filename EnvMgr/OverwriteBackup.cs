@@ -23,7 +23,7 @@ namespace EnvMgr
             _form1 = form1;
         }
 
-        public void OverwriteDBThread(string dynamicsScript, string nonMBScript, string mbScript, string dbPath, string sqlServ, string sqlUser, string sqlPassword)
+        public void OverwriteDBThread(string dynamicsScript, string nonMBScript, string mbScript, string dbPath)
         {
             try
             {
@@ -31,20 +31,50 @@ namespace EnvMgr
 
                 string bakDescription = tbDBBackupDescription.Text;
 
-                SqlConnection sqlCon = new SqlConnection(@"Data Source=" + sqlServ + @";Initial Catalog=MASTER;User ID=" + sqlUser + @";Password=" + sqlPassword + @";");
+                List<string> runningSQLServer = SQLManagement.GetRunningSQLServers();
+                if (runningSQLServer.Count > 1)
+                {
+                    MessageBox.Show("There are multiple sql servers running. Please stop any sql servers not being used. Environment Manager will target the remaining running sql server.");
+                    return;
+                }
+                if (runningSQLServer.Count == 0)
+                {
+                    MessageBox.Show("There are no sql servers running. Please start a sql server and try again.");
+                    return;
+                }
+                foreach (string server in runningSQLServer)
+                {
+                    try
+                    {
+                        Directory.Delete(dbPath, true);
+                    }
+                    catch (Exception e1)
+                    {
+                        MessageBox.Show("Failed deleting the selected db backup " + dbPath + "\n\n" + e1);
+                        return;
+                    }
+                    try
+                    {
+                        Directory.CreateDirectory(dbPath);
+                    }
+                    catch (Exception e2)
+                    {
+                        MessageBox.Show("Failed creating the following directory " + dbPath + "\n\n" + e2);
+                        return;
+                    }
+                    SqlConnection sqlCon = new SqlConnection(@"Data Source=" + Environment.MachineName + "\\" + server + @";Initial Catalog=MASTER;User ID=sa;Password=sa;");
+                    SqlDataAdapter restoreDynScript = new SqlDataAdapter(dynamicsScript, sqlCon);
+                    DataTable restoreDynTable = new DataTable();
+                    restoreDynScript.Fill(restoreDynTable);
 
-                SqlDataAdapter restoreDynScript = new SqlDataAdapter(dynamicsScript, sqlCon);
-                DataTable restoreDynTable = new DataTable();
-                restoreDynScript.Fill(restoreDynTable);
+                    SqlDataAdapter restoreNonMBScript = new SqlDataAdapter(nonMBScript, sqlCon);
+                    DataTable restoreNonMBTable = new DataTable();
+                    restoreNonMBScript.Fill(restoreNonMBTable);
 
-                SqlDataAdapter restoreNonMBScript = new SqlDataAdapter(nonMBScript, sqlCon);
-                DataTable restoreNonMBTable = new DataTable();
-                restoreNonMBScript.Fill(restoreNonMBTable);
-
-                SqlDataAdapter restoreMBScript = new SqlDataAdapter(mbScript, sqlCon);
-                DataTable restoreMBTable = new DataTable();
-                restoreMBScript.Fill(restoreMBTable);
-
+                    SqlDataAdapter restoreMBScript = new SqlDataAdapter(mbScript, sqlCon);
+                    DataTable restoreMBTable = new DataTable();
+                    restoreMBScript.Fill(restoreMBTable);
+                }
                 using (StreamWriter sw = File.AppendText(dbPath + @"\Description.txt"))
                 {
                     sw.WriteLine("===============================================================================");
@@ -80,9 +110,6 @@ namespace EnvMgr
 
             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
             string dbPath = Convert.ToString(key.GetValue("DB Folder")) + Form1.selectedGPVersion + "\\" + Form1.dbToCreate;
-            string sqlServ = Convert.ToString(key.GetValue("SQL Server Name"));
-            string sqlUser = Convert.ToString(key.GetValue("SQL Username"));
-            string sqlPassword = Convert.ToString(key.GetValue("SQL Password"));
             string dynamicsDB = Convert.ToString(key.GetValue("Dynamics Database"));
             string nonMBDB = Convert.ToString(key.GetValue("Non-MB Database"));
             string mbDB = Convert.ToString(key.GetValue("MB Database"));
@@ -90,43 +117,7 @@ namespace EnvMgr
             string nonMBScript = @"BACKUP DATABASE " + nonMBDB + @" TO DISK='" + dbPath + "\\" + nonMBDB + ".bak' WITH INIT";
             string mbScript = @"BACKUP DATABASE " + mbDB + @" TO DISK='" + dbPath + "\\" + mbDB + ".bak' WITH INIT";
 
-            SqlConnection sqlCon = new SqlConnection(@"Data Source=" + sqlServ + @";Initial Catalog=MASTER;User ID=" + sqlUser + @";Password=" + sqlPassword + @";");
-
-            try
-            {
-                sqlCon.Open();
-            }
-            catch (SqlException)
-            {
-                string errorMessage = "Unable to overwrite the selected database! Please check that your SQL Server is running and try again.";
-                string errorCaption = "ERROR OVERWRITING";
-                MessageBoxButtons errorButton = MessageBoxButtons.OK;
-                MessageBoxIcon errorIcon = MessageBoxIcon.Error;
-                DialogResult errorResult;
-
-                errorResult = MessageBox.Show(errorMessage, errorCaption, errorButton, errorIcon);
-                this.Close();
-                return;
-            }
-
-            try
-            {
-                Directory.Delete(dbPath, true);
-            }
-            catch (Exception e1)
-            {
-                MessageBox.Show("Failed deleting the selected db backup " + dbPath + "\n\n" + e1);
-            }
-            try
-            {
-                Directory.CreateDirectory(dbPath);
-            }
-            catch (Exception e2)
-            {
-                MessageBox.Show("Failed creating the following directory " + dbPath + "\n\n" + e2);
-            }
-
-            Thread overProcess = new Thread(() => OverwriteDBThread(dynamicsScript, nonMBScript, mbScript, dbPath, sqlServ, sqlUser, sqlPassword));
+            Thread overProcess = new Thread(() => OverwriteDBThread(dynamicsScript, nonMBScript, mbScript, dbPath));
             overProcess.Start();
             return;
         }

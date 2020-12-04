@@ -69,6 +69,7 @@ namespace EnvMgr
 
                 RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
                 key.SetValue("zLastSPGPInstall", truePath);
+                key.SetValue("zLastSPGPInstallLocal", installPath);
 
                 //**IF DLL CHECKBOX CHECKED COPY X DLLs
                 string extPath = truePath + "\\ExtModules\\" + Form1.selectedProductVersion + "\\";
@@ -374,7 +375,7 @@ namespace EnvMgr
 
         private void OKButton_Click(object sender, EventArgs e)
         {
-            System.IO.DirectoryInfo di = new DirectoryInfo(Environment.CurrentDirectory + @"\Installers");
+            DirectoryInfo di = new DirectoryInfo(Environment.CurrentDirectory + @"\Installers");
             foreach (FileInfo file in di.GetFiles())
             {
                 file.Delete();
@@ -397,7 +398,7 @@ namespace EnvMgr
                 DialogResult existsResult;
 
                 existsResult = MessageBox.Show(existsMessage, existsCaption, existsButtons, existsIcon);
-                if (existsResult == System.Windows.Forms.DialogResult.Yes)
+                if (existsResult == DialogResult.Yes)
                 {
                     //Deleting existing directory if Yes
                     Directory.Delete(installPath, true);
@@ -537,7 +538,7 @@ namespace EnvMgr
                             checkName = "Expresspoint DLLs";
                             return;
                         }
-                        if (result == System.Windows.Forms.DialogResult.Cancel)
+                        if (result == DialogResult.Cancel)
                         {
                             checkExpressPointDLLs.Checked = false;
                             return;
@@ -564,7 +565,7 @@ namespace EnvMgr
                         DialogResult result;
 
                         result = MessageBox.Show(message, caption, buttons, icon);
-                        if (result == System.Windows.Forms.DialogResult.Yes)
+                        if (result == DialogResult.Yes)
                         {
                             if (checkName == "Expresspoint DLLs")
                             {
@@ -596,7 +597,7 @@ namespace EnvMgr
                         DialogResult result;
 
                         result = MessageBox.Show(message, caption, buttons, icon);
-                        if (result == System.Windows.Forms.DialogResult.Yes)
+                        if (result == DialogResult.Yes)
                         {
                             if (checkName == "Expresspoint DLLs")
                             {
@@ -640,13 +641,13 @@ namespace EnvMgr
                         DialogResult result;
 
                         result = MessageBox.Show(message, caption, buttons, icon);
-                        if (result == System.Windows.Forms.DialogResult.Yes)
+                        if (result == DialogResult.Yes)
                         {
                             allowAddDLL = true;
                             checkName = "EDI DLL";
                             return;
                         }
-                        if (result == System.Windows.Forms.DialogResult.No)
+                        if (result == DialogResult.No)
                         {
                             allowAddDLL = true;
                             lbExtendedDLLList.ClearSelected();
@@ -655,7 +656,7 @@ namespace EnvMgr
                             checkName = "EDI DLL";
                             return;
                         }
-                        if (result == System.Windows.Forms.DialogResult.Cancel)
+                        if (result == DialogResult.Cancel)
                         {
                             checkEDIDLL.Checked = false;
                             return;
@@ -682,7 +683,7 @@ namespace EnvMgr
                         DialogResult result;
 
                         result = MessageBox.Show(message, caption, buttons, icon);
-                        if (result == System.Windows.Forms.DialogResult.Yes)
+                        if (result == DialogResult.Yes)
                         {
                             if (checkName == "Expresspoint DLLs")
                             {
@@ -714,7 +715,7 @@ namespace EnvMgr
                         DialogResult result;
 
                         result = MessageBox.Show(message, caption, buttons, icon);
-                        if (result == System.Windows.Forms.DialogResult.Yes)
+                        if (result == DialogResult.Yes)
                         {
                             if (checkName == "Expresspoint DLLs")
                             {
@@ -758,13 +759,13 @@ namespace EnvMgr
                         DialogResult result;
 
                         result = MessageBox.Show(message, caption, buttons, icon);
-                        if (result == System.Windows.Forms.DialogResult.Yes)
+                        if (result == DialogResult.Yes)
                         {
                             allowAddDLL = true;
                             checkName = "TPG DLLs";
                             return;
                         }
-                        if (result == System.Windows.Forms.DialogResult.No)
+                        if (result == DialogResult.No)
                         {
                             allowAddDLL = true;
                             lbExtendedDLLList.ClearSelected();
@@ -773,7 +774,7 @@ namespace EnvMgr
                             checkName = "TPG DLLs";
                             return;
                         }
-                        if (result == System.Windows.Forms.DialogResult.Cancel)
+                        if (result == DialogResult.Cancel)
                         {
                             checkTPGDLLs.Checked = false;
                             return;
@@ -800,7 +801,7 @@ namespace EnvMgr
                         DialogResult result;
 
                         result = MessageBox.Show(message, caption, buttons, icon);
-                        if (result == System.Windows.Forms.DialogResult.Yes)
+                        if (result == DialogResult.Yes)
                         {
                             if (checkName == "Expresspoint DLLs")
                             {
@@ -832,7 +833,7 @@ namespace EnvMgr
                         DialogResult result;
 
                         result = MessageBox.Show(message, caption, buttons, icon);
-                        if (result == System.Windows.Forms.DialogResult.Yes)
+                        if (result == DialogResult.Yes)
                         {
                             if (checkName == "Expresspoint DLLs")
                             {
@@ -876,13 +877,13 @@ namespace EnvMgr
                         DialogResult result;
 
                         result = MessageBox.Show(message, caption, buttons, icon);
-                        if (result == System.Windows.Forms.DialogResult.Yes)
+                        if (result == DialogResult.Yes)
                         {
                             allowAddDLL = true;
                             checkName = "Automation Agent DLLs";
                             return;
                         }
-                        if (result == System.Windows.Forms.DialogResult.No)
+                        if (result == DialogResult.No)
                         {
                             allowAddDLL = true;
                             lbExtendedDLLList.ClearSelected();
@@ -891,7 +892,7 @@ namespace EnvMgr
                             checkName = "Automation Agent DLLs";
                             return;
                         }
-                        if (result == System.Windows.Forms.DialogResult.Cancel)
+                        if (result == DialogResult.Cancel)
                         {
                             checkAutomationAgentDLLs.Checked = false;
                             return;
