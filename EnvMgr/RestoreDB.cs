@@ -59,7 +59,15 @@ namespace EnvMgr
                         catch (Exception restoreError)
                         {
                             string errorMessage = "There was an error restoring \"" + file + "\".";
-                            ExceptionHandling.LogException(restoreError.ToString(), errorMessage);
+                            //ExceptionHandling.LogException(restoreError.ToString(), errorMessage);
+                            try
+                            {
+                                ExceptionHandling.LogException2("Restore Database", "System.Data.SqlClient.SqlException", restoreError.Message, restoreError.Source, restoreError.StackTrace);
+                            }
+                            catch (Exception e1)
+                            {
+                                MessageBox.Show(e1.ToString());
+                            }
                             MessageBox.Show(errorMessage);
                             _form1.DisableDBControls(true);
                             _form1.DisableSQLControls(true);
@@ -70,7 +78,15 @@ namespace EnvMgr
                 catch (Exception sqlConnectionError)
                 {
                     string errorMessage = "Could not connect to the SQL Server. Please verify your SQL Server is running and try again.";
-                    ExceptionHandling.LogException(sqlConnectionError.ToString(), errorMessage);
+                    //ExceptionHandling.LogException(sqlConnectionError.ToString(), errorMessage);
+                    try
+                    {
+                        ExceptionHandling.LogException2("Restore Database", "System.Data.SqlClient.SqlException", sqlConnectionError.Message, sqlConnectionError.Source, sqlConnectionError.StackTrace);
+                    }
+                    catch (Exception e2)
+                    {
+                        MessageBox.Show(e2.ToString());
+                    }
                     MessageBox.Show(errorMessage);
                     _form1.DisableDBControls(true);
                     _form1.DisableSQLControls(true);

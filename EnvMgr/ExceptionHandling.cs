@@ -40,5 +40,33 @@ namespace EnvMgr
             }
             return true;
         }
+        public static bool LogException2(string businessObject, string type, string message, string source, string stackTrace)
+        {
+            //Write the exception and a message to a log.
+            if (!File.Exists(logFile))
+            {
+                try
+                {
+                    File.Create(logFile);
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            string errorToLog = divider + "\n" + divider + "\n" + "{" + DateTime.Now + "}" + "\nEXCEPTION\n" + "Exception Area: " + businessObject + "\nException Type: " + type + "\nException Message: " + message + "\nException Source: " + source + "\n\nSTACK TRACE\n" + stackTrace;
+            using (StreamWriter sw = File.AppendText(logFile))
+            {
+                try
+                {
+                    sw.WriteLine(errorToLog);
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }

@@ -44,6 +44,7 @@
             this.databaseLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.purgeCloudEnvironmentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backupBackupsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.purgeGPDatabasesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -85,7 +86,7 @@
             this.tbIPAddress = new System.Windows.Forms.TextBox();
             this.labelReloadIPAddress = new System.Windows.Forms.Label();
             this.cbAlwaysOnTop = new System.Windows.Forms.CheckBox();
-            this.purgeGPDatabasesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.killSalesPadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -137,7 +138,8 @@
             this.databaseLogToolStripMenuItem,
             this.purgeCloudEnvironmentsToolStripMenuItem,
             this.backupBackupsToolStripMenuItem,
-            this.purgeGPDatabasesToolStripMenuItem});
+            this.purgeGPDatabasesToolStripMenuItem,
+            this.killSalesPadToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -215,6 +217,13 @@
             this.backupBackupsToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
             this.backupBackupsToolStripMenuItem.Text = "Backup Backups";
             this.backupBackupsToolStripMenuItem.Click += new System.EventHandler(this.backupBackupsToolStripMenuItem_Click);
+            // 
+            // purgeGPDatabasesToolStripMenuItem
+            // 
+            this.purgeGPDatabasesToolStripMenuItem.Name = "purgeGPDatabasesToolStripMenuItem";
+            this.purgeGPDatabasesToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
+            this.purgeGPDatabasesToolStripMenuItem.Text = "Purge GP Databases";
+            this.purgeGPDatabasesToolStripMenuItem.Click += new System.EventHandler(this.purgeGPDatabasesToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -684,12 +693,12 @@
             this.cbAlwaysOnTop.UseVisualStyleBackColor = true;
             this.cbAlwaysOnTop.CheckedChanged += new System.EventHandler(this.cbAlwaysOnTop_CheckedChanged);
             // 
-            // purgeGPDatabasesToolStripMenuItem
+            // killSalesPadToolStripMenuItem
             // 
-            this.purgeGPDatabasesToolStripMenuItem.Name = "purgeGPDatabasesToolStripMenuItem";
-            this.purgeGPDatabasesToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
-            this.purgeGPDatabasesToolStripMenuItem.Text = "Purge GP Databases";
-            this.purgeGPDatabasesToolStripMenuItem.Click += new System.EventHandler(this.purgeGPDatabasesToolStripMenuItem_Click);
+            this.killSalesPadToolStripMenuItem.Name = "killSalesPadToolStripMenuItem";
+            this.killSalesPadToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
+            this.killSalesPadToolStripMenuItem.Text = "Kill SalesPad";
+            this.killSalesPadToolStripMenuItem.Click += new System.EventHandler(this.killSalesPadToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -783,6 +792,7 @@
         private System.Windows.Forms.ToolStripMenuItem backupBackupsToolStripMenuItem;
         private System.Windows.Forms.Button btnLaunchGPUtils;
         private System.Windows.Forms.ToolStripMenuItem purgeGPDatabasesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem killSalesPadToolStripMenuItem;
     }
 }
 

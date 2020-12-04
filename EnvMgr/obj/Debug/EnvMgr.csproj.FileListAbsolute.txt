@@ -27,3 +27,4 @@ C:\Users\steve.rodriguez\source\repos\EnvMgr\EnvMgr\obj\Debug\EnvMgr.BackupBacku
 C:\Users\steve.rodriguez\source\repos\EnvMgr\EnvMgr\obj\Debug\EnvMgr.RestoreDB.resources
 C:\Users\steve.rodriguez\source\repos\EnvMgr\EnvMgr\obj\Debug\EnvMgr.PurgeGPDatabases.resources
 C:\Users\steve.rodriguez\source\repos\EnvMgr\EnvMgr\obj\Debug\EnvMgr.OverwriteBackupSelect.resources
+C:\Users\steve.rodriguez\source\repos\EnvMgr\EnvMgr\obj\Debug\EnvMgr.csprojAssemblyReference.cache

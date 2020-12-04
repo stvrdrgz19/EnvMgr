@@ -1539,5 +1539,14 @@ namespace EnvMgr
             purgeGPDatabases.Show();
             return;
         }
+
+        private void killSalesPadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (var process in Process.GetProcessesByName("SalesPad"))
+            {
+                process.Kill();
+            }
+            return;
+        }
     }
 }
