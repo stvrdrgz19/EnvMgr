@@ -50,26 +50,36 @@ namespace EnvMgr
             {
                 string script = "";
                 RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
-                string sqlServ = Convert.ToString(key.GetValue("SQL Server Name"));
-                string sqlUser = Convert.ToString(key.GetValue("SQL Username"));
-                string sqlPassword = Convert.ToString(key.GetValue("SQL Password"));
                 string nonMBDB = Convert.ToString(key.GetValue("Non-MB Database"));
                 string mbDB = Convert.ToString(key.GetValue("MB Database"));
 
-                if (checkTWO.Checked)
+                List<string> runningSQLServer = SQLManagement.GetRunningSQLServers();
+                if (runningSQLServer.Count > 1)
                 {
-                    script = @"USE [" + nonMBDB + @"] EXEC dbo.sppResetDatabase";
+                    MessageBox.Show("There are multiple sql servers running. Please stop any sql servers not being used. Environment Manager will target the remaining running sql server.");
+                    return;
                 }
-                if (checkTWOMB.Checked)
+                if (runningSQLServer.Count == 0)
                 {
-                    script = @"USE [" + mbDB + @"] EXEC dbo.sppResetDatabase";
+                    MessageBox.Show("There are no sql servers running. Please start a sql server and try again.");
+                    return;
                 }
+                foreach (string server in runningSQLServer)
+                {
+                    if (checkTWO.Checked)
+                    {
+                        script = @"USE [" + nonMBDB + @"] EXEC dbo.sppResetDatabase";
+                    }
+                    if (checkTWOMB.Checked)
+                    {
+                        script = @"USE [" + mbDB + @"] EXEC dbo.sppResetDatabase";
+                    }
 
-                SqlConnection sqlCon = new SqlConnection(@"Data Source=" + sqlServ + @";Initial Catalog=MASTER;User ID=" + sqlUser + @";Password=" + sqlPassword + @";");
-                SqlDataAdapter restoreDynScript = new SqlDataAdapter(script, sqlCon);
-                DataTable restoreDynTable = new DataTable();
-                restoreDynScript.Fill(restoreDynTable);
-
+                    SqlConnection sqlCon = new SqlConnection(@"Data Source=" + Environment.MachineName + "\\" + server + @";Initial Catalog=MASTER;User ID=sa;Password=sa;");
+                    SqlDataAdapter restoreDynScript = new SqlDataAdapter(script, sqlCon);
+                    DataTable restoreDynTable = new DataTable();
+                    restoreDynScript.Fill(restoreDynTable);
+                }
                 this.Close();
             }
             return;

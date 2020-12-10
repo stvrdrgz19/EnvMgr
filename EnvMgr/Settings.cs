@@ -24,6 +24,8 @@ namespace EnvMgr
         public static string startingDC = "";
         public static string startingSPM = "";
         public static string startingSC = "";
+        public static bool startingAutoInstall = false;
+        public static bool startingAutoOverwrite = false;
         public static string startingTenantName = "";
 
         public Settings()
@@ -31,7 +33,7 @@ namespace EnvMgr
             InitializeComponent();
         }
 
-        public static bool CheckForUnsavedChanges(string dbBak, bool dbMethod, string dynamicsDB, string twoDB, string twombDB, string x86SP, string x64SP, string DC, string SPM, string SC, string tenantName)
+        public static bool CheckForUnsavedChanges(string dbBak, bool dbMethod, string dynamicsDB, string twoDB, string twombDB, string x86SP, string x64SP, string DC, string SPM, string SC, bool autoInstall, bool autoOverwrite, string tenantName)
         {
             bool changesMade = false;
             if (startingDBFolder != dbBak)
@@ -74,11 +76,36 @@ namespace EnvMgr
             {
                 changesMade = true;
             }
+            if (startingAutoInstall != autoInstall)
+            {
+                changesMade = true;
+            }
+            if (startingAutoOverwrite != autoOverwrite)
+            {
+                changesMade = true;
+            }
             if (startingTenantName != tenantName)
             {
                 changesMade = true;
             }
             return changesMade;
+        }
+
+        public void SetStartingValue()
+        {
+            startingDBFolder = tbDBDirectory.Text;
+            startingDBMethod = cbDBMethod.Checked;
+            startingDynamics = tbDynamicsDB.Text;
+            startingNonMB = tbNonMBDB.Text;
+            startingMB = tbMBDB.Text;
+            startingSPGPx86 = tbSPGPx86Directory.Text;
+            startingSPGPx64 = tbSPGPx64Directory.Text;
+            startingDC = tbDCDirectory.Text;
+            startingSPM = tbSPMDirectory.Text;
+            startingSC = tbSCDirectory.Text;
+            startingAutoInstall = cbAutoInstall.Checked;
+            startingAutoOverwrite = cbAutoOverwrite.Checked;
+            startingTenantName = tbTenantName.Text;
         }
 
         private void SaveSettings()
@@ -93,18 +120,10 @@ namespace EnvMgr
             string DC = tbDCDirectory.Text;
             string SPM = tbSPMDirectory.Text;
             string SC = tbSCDirectory.Text;
+            bool AutoInstall = cbAutoInstall.Checked;
+            bool AutoOverwrite = cbAutoOverwrite.Checked;
             string TenantName = tbTenantName.Text;
-            startingDBFolder = tbDBDirectory.Text;
-            startingDBMethod = cbDBMethod.Checked;
-            startingDynamics = tbDynamicsDB.Text;
-            startingNonMB = tbNonMBDB.Text;
-            startingMB = tbMBDB.Text;
-            startingSPGPx86 = tbSPGPx86Directory.Text;
-            startingSPGPx64 = tbSPGPx64Directory.Text;
-            startingDC = tbDCDirectory.Text;
-            startingSPM = tbSPMDirectory.Text;
-            startingSC = tbSCDirectory.Text;
-            startingTenantName = tbTenantName.Text;
+            SetStartingValue();
 
             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
             key.SetValue("DB Folder", DBFolder);
@@ -117,6 +136,8 @@ namespace EnvMgr
             key.SetValue("DC Directory", DC);
             key.SetValue("SPM Directory", SPM);
             key.SetValue("SC Directory", SC);
+            key.SetValue("Auto Install Product", AutoInstall);
+            key.SetValue("Auto Overwrite Install", AutoOverwrite);
             key.SetValue("Tenant Name", TenantName);
         }
 
@@ -143,19 +164,11 @@ namespace EnvMgr
             tbDCDirectory.Text = Convert.ToString(key.GetValue("DC Directory"));
             tbSPMDirectory.Text = Convert.ToString(key.GetValue("SPM Directory"));
             tbSCDirectory.Text = Convert.ToString(key.GetValue("SC Directory"));
+            cbAutoInstall.Checked = Convert.ToBoolean(key.GetValue("Auto Install Product"));
+            cbAutoOverwrite.Checked = Convert.ToBoolean(key.GetValue("Auto Overwrite Install"));
             tbTenantName.Text = Convert.ToString(key.GetValue("Tenant Name"));
 
-            startingDBFolder = tbDBDirectory.Text;
-            startingDBMethod = cbDBMethod.Checked;
-            startingDynamics = tbDynamicsDB.Text;
-            startingNonMB = tbNonMBDB.Text;
-            startingMB = tbMBDB.Text;
-            startingSPGPx86 = tbSPGPx86Directory.Text;
-            startingSPGPx64 = tbSPGPx64Directory.Text;
-            startingDC = tbDCDirectory.Text;
-            startingSPM = tbSPMDirectory.Text;
-            startingSC = tbSCDirectory.Text;
-            startingTenantName = tbTenantName.Text;
+            SetStartingValue();
 
             if (cbDBMethod.Checked)
             {
@@ -172,7 +185,7 @@ namespace EnvMgr
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-            bool changesMade = CheckForUnsavedChanges(tbDBDirectory.Text, cbDBMethod.Checked, tbDynamicsDB.Text, tbNonMBDB.Text, tbMBDB.Text, tbSPGPx86Directory.Text, tbSPGPx64Directory.Text, tbDCDirectory.Text, tbSPMDirectory.Text, tbSCDirectory.Text, tbTenantName.Text);
+            bool changesMade = CheckForUnsavedChanges(tbDBDirectory.Text, cbDBMethod.Checked, tbDynamicsDB.Text, tbNonMBDB.Text, tbMBDB.Text, tbSPGPx86Directory.Text, tbSPGPx64Directory.Text, tbDCDirectory.Text, tbSPMDirectory.Text, tbSCDirectory.Text, cbAutoInstall.Checked, cbAutoOverwrite.Checked, tbTenantName.Text);
             if (changesMade == true)
             {
                 string saveChangesMessage = "There are un-saved changes, do you want to save these changes?";
@@ -184,30 +197,7 @@ namespace EnvMgr
                 saveChangesResult = MessageBox.Show(saveChangesMessage, saveChangesCaption, saveChangesButtons, saveChangesIcon);
                 if (saveChangesResult == DialogResult.Yes)
                 {
-                    string DBFolder = tbDBDirectory.Text;
-                    bool DBMethod = cbDBMethod.Checked;
-                    string DynamicsDB = tbDynamicsDB.Text;
-                    string NonMBDB = tbNonMBDB.Text;
-                    string MBDB = tbMBDB.Text;
-                    string SPGPx86 = tbSPGPx86Directory.Text;
-                    string SPGPx64 = tbSPGPx64Directory.Text;
-                    string DC = tbDCDirectory.Text;
-                    string SPM = tbSPMDirectory.Text;
-                    string SC = tbSCDirectory.Text;
-                    string TenantName = tbTenantName.Text;
-
-                    RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
-                    key.SetValue("DB Folder", DBFolder);
-                    key.SetValue("DB Method", DBMethod);
-                    key.SetValue("Dynamics Database", DynamicsDB);
-                    key.SetValue("Non-MB Database", NonMBDB);
-                    key.SetValue("MB Database", MBDB);
-                    key.SetValue("x86 SPGP Directory", SPGPx86);
-                    key.SetValue("x64 SPGP Directory", SPGPx64);
-                    key.SetValue("DC Directory", DC);
-                    key.SetValue("SPM Directory", SPM);
-                    key.SetValue("SC Directory", SC);
-                    key.SetValue("Tenant Name", TenantName);
+                    SaveSettings();
                 }
                 if (saveChangesResult == DialogResult.No)
                 {
@@ -377,7 +367,7 @@ namespace EnvMgr
 
         private void btnExport_Click(object sender, EventArgs e)
         {
-            bool unsavedChanges = CheckForUnsavedChanges(tbDBDirectory.Text, cbDBMethod.Checked, tbDynamicsDB.Text, tbNonMBDB.Text, tbMBDB.Text, tbSPGPx86Directory.Text, tbSPGPx64Directory.Text, tbDCDirectory.Text, tbSPMDirectory.Text, tbSCDirectory.Text, tbTenantName.Text);
+            bool unsavedChanges = CheckForUnsavedChanges(tbDBDirectory.Text, cbDBMethod.Checked, tbDynamicsDB.Text, tbNonMBDB.Text, tbMBDB.Text, tbSPGPx86Directory.Text, tbSPGPx64Directory.Text, tbDCDirectory.Text, tbSPMDirectory.Text, tbSCDirectory.Text, cbAutoInstall.Checked, cbAutoOverwrite.Checked, tbTenantName.Text);
             if (unsavedChanges == true)
             {
                 string message = "You must save changes made to Settings before Exporting. Do you want to Save and Export?";

@@ -109,15 +109,25 @@ namespace EnvMgr
 
         private void LoadDatabaseList()
         {
-            RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
-            string sqlServ = Convert.ToString(key.GetValue("SQL Server Name"));
-            string sqlUser = Convert.ToString(key.GetValue("SQL Username"));
-            string sqlPassword = Convert.ToString(key.GetValue("SQL Password"));
-            SqlConnection sqlCon = new SqlConnection(@"Data Source=" + sqlServ + @";Initial Catalog=MASTER;User ID=" + sqlUser + @";Password=" + sqlPassword + @";");
-            var databaseList = sqlCon.Query<string>("SELECT name FROM sys.databases WHERE name NOT IN ('master','tempdb','model','msdb')").AsList();
-            foreach (string database in databaseList)
+            List<string> runningSQLServer = SQLManagement.GetRunningSQLServers();
+            if (runningSQLServer.Count > 1)
             {
-                lbDatabases.Items.Add(database);
+                MessageBox.Show("There are multiple sql servers running. Please stop any sql servers not being used. Environment Manager will target the remaining running sql server.");
+                return;
+            }
+            if (runningSQLServer.Count == 0)
+            {
+                MessageBox.Show("There are no sql servers running. Please start a sql server and try again.");
+                return;
+            }
+            foreach (string server in runningSQLServer)
+            {
+                SqlConnection sqlCon = new SqlConnection(@"Data Source=" + Environment.MachineName + "\\" + server + ";Initial Catalog=MASTER;User ID=sa;Password=sa;");
+                var databaseList = sqlCon.Query<string>("SELECT name FROM sys.databases WHERE name NOT IN ('master','tempdb','model','msdb')").AsList();
+                foreach (string database in databaseList)
+                {
+                    lbDatabases.Items.Add(database);
+                }
             }
         }
 

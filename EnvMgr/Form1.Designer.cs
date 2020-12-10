@@ -45,6 +45,7 @@
             this.purgeCloudEnvironmentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backupBackupsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.purgeGPDatabasesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.killSalesPadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -86,7 +87,6 @@
             this.tbIPAddress = new System.Windows.Forms.TextBox();
             this.labelReloadIPAddress = new System.Windows.Forms.Label();
             this.cbAlwaysOnTop = new System.Windows.Forms.CheckBox();
-            this.killSalesPadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -224,6 +224,13 @@
             this.purgeGPDatabasesToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
             this.purgeGPDatabasesToolStripMenuItem.Text = "Purge GP Databases";
             this.purgeGPDatabasesToolStripMenuItem.Click += new System.EventHandler(this.purgeGPDatabasesToolStripMenuItem_Click);
+            // 
+            // killSalesPadToolStripMenuItem
+            // 
+            this.killSalesPadToolStripMenuItem.Name = "killSalesPadToolStripMenuItem";
+            this.killSalesPadToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
+            this.killSalesPadToolStripMenuItem.Text = "Kill SalesPad";
+            this.killSalesPadToolStripMenuItem.Click += new System.EventHandler(this.killSalesPadToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -473,9 +480,9 @@
             // btnDeleteBackup
             // 
             this.btnDeleteBackup.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnDeleteBackup.Location = new System.Drawing.Point(383, 206);
+            this.btnDeleteBackup.Location = new System.Drawing.Point(380, 206);
             this.btnDeleteBackup.Name = "btnDeleteBackup";
-            this.btnDeleteBackup.Size = new System.Drawing.Size(122, 23);
+            this.btnDeleteBackup.Size = new System.Drawing.Size(125, 23);
             this.btnDeleteBackup.TabIndex = 8;
             this.btnDeleteBackup.Text = "Delete DB Backup";
             this.btnDeleteBackup.UseVisualStyleBackColor = true;
@@ -484,9 +491,9 @@
             // btnNewDB
             // 
             this.btnNewDB.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnNewDB.Location = new System.Drawing.Point(257, 206);
+            this.btnNewDB.Location = new System.Drawing.Point(255, 206);
             this.btnNewDB.Name = "btnNewDB";
-            this.btnNewDB.Size = new System.Drawing.Size(122, 23);
+            this.btnNewDB.Size = new System.Drawing.Size(125, 23);
             this.btnNewDB.TabIndex = 7;
             this.btnNewDB.Text = "New DB Backup";
             this.btnNewDB.UseVisualStyleBackColor = true;
@@ -495,9 +502,9 @@
             // btnOverwriteDB
             // 
             this.btnOverwriteDB.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnOverwriteDB.Location = new System.Drawing.Point(131, 206);
+            this.btnOverwriteDB.Location = new System.Drawing.Point(130, 206);
             this.btnOverwriteDB.Name = "btnOverwriteDB";
-            this.btnOverwriteDB.Size = new System.Drawing.Size(122, 23);
+            this.btnOverwriteDB.Size = new System.Drawing.Size(125, 23);
             this.btnOverwriteDB.TabIndex = 6;
             this.btnOverwriteDB.Text = "Overwrite DB";
             this.btnOverwriteDB.UseVisualStyleBackColor = true;
@@ -518,7 +525,7 @@
             this.btnRestoreDB.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnRestoreDB.Location = new System.Drawing.Point(5, 206);
             this.btnRestoreDB.Name = "btnRestoreDB";
-            this.btnRestoreDB.Size = new System.Drawing.Size(122, 23);
+            this.btnRestoreDB.Size = new System.Drawing.Size(125, 23);
             this.btnRestoreDB.TabIndex = 4;
             this.btnRestoreDB.Text = "Restore DB";
             this.btnRestoreDB.UseVisualStyleBackColor = true;
@@ -593,9 +600,9 @@
             // btnBuildFolder
             // 
             this.btnBuildFolder.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnBuildFolder.Location = new System.Drawing.Point(383, 42);
+            this.btnBuildFolder.Location = new System.Drawing.Point(380, 42);
             this.btnBuildFolder.Name = "btnBuildFolder";
-            this.btnBuildFolder.Size = new System.Drawing.Size(122, 23);
+            this.btnBuildFolder.Size = new System.Drawing.Size(125, 23);
             this.btnBuildFolder.TabIndex = 12;
             this.btnBuildFolder.Text = "Build Folder";
             this.btnBuildFolder.UseVisualStyleBackColor = true;
@@ -618,9 +625,9 @@
             // btnDLLManager
             // 
             this.btnDLLManager.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnDLLManager.Location = new System.Drawing.Point(257, 42);
+            this.btnDLLManager.Location = new System.Drawing.Point(255, 42);
             this.btnDLLManager.Name = "btnDLLManager";
-            this.btnDLLManager.Size = new System.Drawing.Size(122, 23);
+            this.btnDLLManager.Size = new System.Drawing.Size(125, 23);
             this.btnDLLManager.TabIndex = 11;
             this.btnDLLManager.Text = "DLL Manager";
             this.btnDLLManager.UseVisualStyleBackColor = true;
@@ -644,9 +651,9 @@
             // btnLaunchProduct
             // 
             this.btnLaunchProduct.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnLaunchProduct.Location = new System.Drawing.Point(131, 42);
+            this.btnLaunchProduct.Location = new System.Drawing.Point(130, 42);
             this.btnLaunchProduct.Name = "btnLaunchProduct";
-            this.btnLaunchProduct.Size = new System.Drawing.Size(122, 23);
+            this.btnLaunchProduct.Size = new System.Drawing.Size(125, 23);
             this.btnLaunchProduct.TabIndex = 10;
             this.btnLaunchProduct.Text = "Launch Product";
             this.btnLaunchProduct.UseVisualStyleBackColor = true;
@@ -657,7 +664,7 @@
             this.btnInstallProduct.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnInstallProduct.Location = new System.Drawing.Point(5, 42);
             this.btnInstallProduct.Name = "btnInstallProduct";
-            this.btnInstallProduct.Size = new System.Drawing.Size(122, 23);
+            this.btnInstallProduct.Size = new System.Drawing.Size(125, 23);
             this.btnInstallProduct.TabIndex = 9;
             this.btnInstallProduct.Text = "Install";
             this.btnInstallProduct.UseVisualStyleBackColor = true;
@@ -665,17 +672,17 @@
             // 
             // tbIPAddress
             // 
-            this.tbIPAddress.Location = new System.Drawing.Point(389, 590);
+            this.tbIPAddress.Location = new System.Drawing.Point(386, 590);
             this.tbIPAddress.Name = "tbIPAddress";
             this.tbIPAddress.ReadOnly = true;
-            this.tbIPAddress.Size = new System.Drawing.Size(120, 20);
+            this.tbIPAddress.Size = new System.Drawing.Size(123, 20);
             this.tbIPAddress.TabIndex = 4;
             this.tbIPAddress.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // labelReloadIPAddress
             // 
             this.labelReloadIPAddress.AutoSize = true;
-            this.labelReloadIPAddress.Location = new System.Drawing.Point(327, 593);
+            this.labelReloadIPAddress.Location = new System.Drawing.Point(324, 593);
             this.labelReloadIPAddress.Name = "labelReloadIPAddress";
             this.labelReloadIPAddress.Size = new System.Drawing.Size(61, 13);
             this.labelReloadIPAddress.TabIndex = 5;
@@ -692,13 +699,6 @@
             this.cbAlwaysOnTop.Text = "Always On Top";
             this.cbAlwaysOnTop.UseVisualStyleBackColor = true;
             this.cbAlwaysOnTop.CheckedChanged += new System.EventHandler(this.cbAlwaysOnTop_CheckedChanged);
-            // 
-            // killSalesPadToolStripMenuItem
-            // 
-            this.killSalesPadToolStripMenuItem.Name = "killSalesPadToolStripMenuItem";
-            this.killSalesPadToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
-            this.killSalesPadToolStripMenuItem.Text = "Kill SalesPad";
-            this.killSalesPadToolStripMenuItem.Click += new System.EventHandler(this.killSalesPadToolStripMenuItem_Click);
             // 
             // Form1
             // 

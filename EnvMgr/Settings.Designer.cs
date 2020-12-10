@@ -67,6 +67,8 @@
             this.btnTenantName = new System.Windows.Forms.Button();
             this.tbTenantName = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
+            this.cbAutoInstall = new System.Windows.Forms.CheckBox();
+            this.cbAutoOverwrite = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -215,7 +217,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(273, 344);
+            this.btnSave.Location = new System.Drawing.Point(273, 385);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 4;
@@ -225,7 +227,7 @@
             // 
             // btnExit
             // 
-            this.btnExit.Location = new System.Drawing.Point(350, 344);
+            this.btnExit.Location = new System.Drawing.Point(350, 385);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 23);
             this.btnExit.TabIndex = 5;
@@ -235,6 +237,8 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.cbAutoOverwrite);
+            this.groupBox2.Controls.Add(this.cbAutoInstall);
             this.groupBox2.Controls.Add(this.btnSCDirectory);
             this.groupBox2.Controls.Add(this.tbSCDirectory);
             this.groupBox2.Controls.Add(this.label8);
@@ -252,7 +256,7 @@
             this.groupBox2.Controls.Add(this.label12);
             this.groupBox2.Location = new System.Drawing.Point(2, 144);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(422, 142);
+            this.groupBox2.Size = new System.Drawing.Size(422, 184);
             this.groupBox2.TabIndex = 6;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Build Management";
@@ -394,7 +398,7 @@
             // 
             // btnExport
             // 
-            this.btnExport.Location = new System.Drawing.Point(80, 344);
+            this.btnExport.Location = new System.Drawing.Point(80, 385);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(75, 23);
             this.btnExport.TabIndex = 8;
@@ -404,7 +408,7 @@
             // 
             // btnImport
             // 
-            this.btnImport.Location = new System.Drawing.Point(3, 344);
+            this.btnImport.Location = new System.Drawing.Point(3, 385);
             this.btnImport.Name = "btnImport";
             this.btnImport.Size = new System.Drawing.Size(75, 23);
             this.btnImport.TabIndex = 7;
@@ -417,7 +421,7 @@
             this.groupBox3.Controls.Add(this.btnTenantName);
             this.groupBox3.Controls.Add(this.tbTenantName);
             this.groupBox3.Controls.Add(this.label13);
-            this.groupBox3.Location = new System.Drawing.Point(2, 293);
+            this.groupBox3.Location = new System.Drawing.Point(2, 334);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(422, 48);
             this.groupBox3.TabIndex = 9;
@@ -451,11 +455,33 @@
             this.label13.TabIndex = 22;
             this.label13.Text = "Tenant Name:";
             // 
+            // cbAutoInstall
+            // 
+            this.cbAutoInstall.AutoSize = true;
+            this.cbAutoInstall.Enabled = false;
+            this.cbAutoInstall.Location = new System.Drawing.Point(9, 139);
+            this.cbAutoInstall.Name = "cbAutoInstall";
+            this.cbAutoInstall.Size = new System.Drawing.Size(204, 17);
+            this.cbAutoInstall.TabIndex = 32;
+            this.cbAutoInstall.Text = "Automatically install using default path";
+            this.cbAutoInstall.UseVisualStyleBackColor = true;
+            // 
+            // cbAutoOverwrite
+            // 
+            this.cbAutoOverwrite.AutoSize = true;
+            this.cbAutoOverwrite.Enabled = false;
+            this.cbAutoOverwrite.Location = new System.Drawing.Point(9, 162);
+            this.cbAutoOverwrite.Name = "cbAutoOverwrite";
+            this.cbAutoOverwrite.Size = new System.Drawing.Size(255, 17);
+            this.cbAutoOverwrite.TabIndex = 33;
+            this.cbAutoOverwrite.Text = "Automatically overwrite existing install if duplicate";
+            this.cbAutoOverwrite.UseVisualStyleBackColor = true;
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(427, 370);
+            this.ClientSize = new System.Drawing.Size(427, 410);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.btnExport);
             this.Controls.Add(this.btnImport);
@@ -519,5 +545,7 @@
         private System.Windows.Forms.Button btnDynamicsDB;
         private System.Windows.Forms.TextBox tbDynamicsDB;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.CheckBox cbAutoOverwrite;
+        private System.Windows.Forms.CheckBox cbAutoInstall;
     }
 }

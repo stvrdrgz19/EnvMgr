@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnvMgr", "EnvMgr\EnvMgr.csp
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{7E5C3B55-0F25-431A-96C5-B5805D62ADC5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnvMgr.UnitTests", "EnvMgr.UnitTests\EnvMgr.UnitTests.csproj", "{5A9352B7-C343-4BA4-A9D8-2C3CB01EF8AD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{ED98C160-6E07-4480-B137-90E447E35D12}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7E5C3B55-0F25-431A-96C5-B5805D62ADC5}.Debug|Any CPU.ActiveCfg = Debug
 		{7E5C3B55-0F25-431A-96C5-B5805D62ADC5}.Release|Any CPU.ActiveCfg = Release
+		{5A9352B7-C343-4BA4-A9D8-2C3CB01EF8AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A9352B7-C343-4BA4-A9D8-2C3CB01EF8AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A9352B7-C343-4BA4-A9D8-2C3CB01EF8AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A9352B7-C343-4BA4-A9D8-2C3CB01EF8AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

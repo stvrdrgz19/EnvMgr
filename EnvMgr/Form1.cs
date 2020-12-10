@@ -617,9 +617,6 @@ namespace EnvMgr
             DisableSQLControls(false);
             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
             string dbPath = Convert.ToString(key.GetValue("DB Folder")) + gpVersion + "\\" + dbName;
-            //string sqlServ = Convert.ToString(key.GetValue("SQL Server Name"));
-            //string sqlUser = Convert.ToString(key.GetValue("SQL Username"));
-            //string sqlPassword = Convert.ToString(key.GetValue("SQL Password"));
             string dynamicsDB = Convert.ToString(key.GetValue("Dynamics Database"));
             string nonMBDB = Convert.ToString(key.GetValue("Non-MB Database"));
             string mbDB = Convert.ToString(key.GetValue("MB Database"));
@@ -655,18 +652,6 @@ namespace EnvMgr
                     DataTable restoreMBTable = new DataTable();
                     restoreMBScript.Fill(restoreMBTable);
                 }
-                //SqlConnection sqlCon = new SqlConnection(@"Data Source=" + sqlServ + @";Initial Catalog=MASTER;User ID=" + sqlUser + @";Password=" + sqlPassword + @";");
-                //SqlDataAdapter restoreDynScript = new SqlDataAdapter(dynamicsScript, sqlCon);
-                //DataTable restoreDynTable = new DataTable();
-                //restoreDynScript.Fill(restoreDynTable);
-
-                //SqlDataAdapter restoreNonMBScript = new SqlDataAdapter(nonMBScript, sqlCon);
-                //DataTable restoreNonMBTable = new DataTable();
-                //restoreNonMBScript.Fill(restoreNonMBTable);
-
-                //SqlDataAdapter restoreMBScript = new SqlDataAdapter(mbScript, sqlCon);
-                //DataTable restoreMBTable = new DataTable();
-                //restoreMBScript.Fill(restoreMBTable);
             }
             catch (SqlException)
             {
@@ -1307,6 +1292,16 @@ namespace EnvMgr
                     if (openFileDialog.ShowDialog() == DialogResult.OK)
                     {
                         filePath = openFileDialog.FileName;
+                        if (!filePath.Contains(@"\SalesPad.GP\"))
+                        {
+                            string message = "The selected installed isn't for the selected product! The selected product is \"" + product + "\"";
+                            string caption = "ERROR";
+                            MessageBoxButtons buttons = MessageBoxButtons.OK;
+                            MessageBoxIcon icon = MessageBoxIcon.Error;
+                            
+                            MessageBox.Show(message, caption, buttons, icon);
+                            return;
+                        }
                         fullInstallerPath = openFileDialog.FileName;
                     }
                     else
@@ -1331,6 +1326,16 @@ namespace EnvMgr
                     if (installerSelect.ShowDialog() == DialogResult.OK)
                     {
                         ProductFilePath = Path.GetDirectoryName(installerSelect.FileName);
+                        if (!ProductFilePath.Contains(@"\Mobile-Server\"))
+                        {
+                            string message = "The selected installed isn't for the selected product! The selected product is \"" + product + "\"";
+                            string caption = "ERROR";
+                            MessageBoxButtons buttons = MessageBoxButtons.OK;
+                            MessageBoxIcon icon = MessageBoxIcon.Error;
+
+                            MessageBox.Show(message, caption, buttons, icon);
+                            return;
+                        }
                         ProductFileName = installerSelect.FileName;
                         OtherInstall InstallForm = new OtherInstall(this);
                         InstallForm.Show();
@@ -1351,6 +1356,16 @@ namespace EnvMgr
                     if (installerSelect.ShowDialog() == DialogResult.OK)
                     {
                         ProductFilePath = Path.GetDirectoryName(installerSelect.FileName);
+                        if (!ProductFilePath.Contains(@"\DataCollection\"))
+                        {
+                            string message = "The selected installed isn't for the selected product! The selected product is \"" + product + "\"";
+                            string caption = "ERROR";
+                            MessageBoxButtons buttons = MessageBoxButtons.OK;
+                            MessageBoxIcon icon = MessageBoxIcon.Error;
+
+                            MessageBox.Show(message, caption, buttons, icon);
+                            return;
+                        }
                         ProductFileName = installerSelect.FileName;
                         OtherInstall InstallForm = new OtherInstall(this);
                         InstallForm.Show();
@@ -1371,6 +1386,16 @@ namespace EnvMgr
                     if (installerSelect.ShowDialog() == DialogResult.OK)
                     {
                         ProductFilePath = Path.GetDirectoryName(installerSelect.FileName);
+                        if (!ProductFilePath.Contains(@"\ShipCenter\"))
+                        {
+                            string message = "The selected installed isn't for the selected product! The selected product is \"" + product + "\"";
+                            string caption = "ERROR";
+                            MessageBoxButtons buttons = MessageBoxButtons.OK;
+                            MessageBoxIcon icon = MessageBoxIcon.Error;
+
+                            MessageBox.Show(message, caption, buttons, icon);
+                            return;
+                        }
                         ProductFileName = installerSelect.FileName;
                         OtherInstall InstallForm = new OtherInstall(this);
                         InstallForm.Show();
