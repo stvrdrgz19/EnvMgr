@@ -318,19 +318,12 @@
             // cbGPListToInstall
             // 
             this.cbGPListToInstall.FormattingEnabled = true;
-            this.cbGPListToInstall.Items.AddRange(new object[] {
-            "GP10",
-            "GP2010",
-            "GP2013",
-            "GP2015",
-            "GP2016",
-            "GP2018",
-            "GP2019"});
             this.cbGPListToInstall.Location = new System.Drawing.Point(6, 200);
             this.cbGPListToInstall.Name = "cbGPListToInstall";
             this.cbGPListToInstall.Size = new System.Drawing.Size(240, 21);
             this.cbGPListToInstall.TabIndex = 3;
             this.cbGPListToInstall.Text = "Select a GP Version To Install";
+            this.cbGPListToInstall.SelectedIndexChanged += new System.EventHandler(this.cbGPListToInstall_SelectedIndexChanged);
             // 
             // btnInstallGP
             // 

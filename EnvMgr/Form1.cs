@@ -90,6 +90,24 @@ namespace EnvMgr
             }
         }
 
+        private void LoadAvailableGPVersions()
+        {
+            cbGPListToInstall.Items.Clear();
+            try
+            {
+                string[] gpVersions = Directory.GetFiles(@"\\sp-fileserv-01\Shares\Autotesting\VM Setup\Microsoft Dynamics", "*.zip");
+                foreach (string version in gpVersions)
+                {
+                    string gp = Path.GetFileNameWithoutExtension(version);
+                    cbGPListToInstall.Items.Add(gp);
+                }
+            }
+            catch
+            {
+                cbGPListToInstall.Items.Add("Failed to connect to sp-fileserv-01");
+            }
+        }
+
         public static string GetLocalIPAddress()
         {
             IPHostEntry host;
@@ -127,8 +145,8 @@ namespace EnvMgr
             {
                 gpVersionToCopy += "Manufacturing";
             }
-            string installDirectory = "C:\\Program Files (X86)\\Microsoft Dynamics\\" + gpVersionToCopy;
-            string sourceDir = "\\\\sp-fileserv-01\\Shares\\Autotesting\\VM Setup\\Microsoft Dynamics\\" + gpVersionToCopy;
+            string installDirectory = @"C:\Program Files (X86)\Microsoft Dynamics\" + gpVersionToCopy;
+            string sourceDir = @"\\sp-fileserv-01\Shares\Autotesting\VM Setup\Microsoft Dynamics\" + gpVersionToCopy;
             try
             {
                 DisableGPControls(false);
@@ -686,6 +704,7 @@ namespace EnvMgr
         private void Form1_Load(object sender, EventArgs e)
         {
             LoadInstalledGPList();
+            LoadAvailableGPVersions();
             SetIPAddress();
             tbDBDesc.Text = dbDescDefault;
             LoadSQLServerListView();
@@ -762,7 +781,7 @@ namespace EnvMgr
             DialogResult result;
             result = MessageBox.Show(message, caption, buttons, icon);
 
-            if (result == System.Windows.Forms.DialogResult.Yes)
+            if (result == DialogResult.Yes)
             {
                 Thread installGP = new Thread(() => InstallDynamics(gpVersion, mfg));
                 installGP.Start();
@@ -1647,9 +1666,7 @@ namespace EnvMgr
 
         private void label3_Click(object sender, EventArgs e)
         {
-            int res1 = Test.Results1(5, 2);
-            int res2 = Test.Results2(5, 2);
-            MessageBox.Show(Convert.ToString(res1) + "\n" + Convert.ToString(res2));
+            LoadAvailableGPVersions();
             return;
         }
 
@@ -1666,6 +1683,12 @@ namespace EnvMgr
             {
                 process.Kill();
             }
+            return;
+        }
+
+        private void cbGPListToInstall_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //
             return;
         }
     }
