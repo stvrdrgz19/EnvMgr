@@ -24,10 +24,11 @@ namespace EnvMgr
             _form1 = form1;
         }
 
-        string x86 = "x86";
-        string x64 = "x64";
         string checkName = "placeholder";
         bool allowAddDLL = false;
+        public static string selectedProductVersion = "";
+        public static string fullInstallerPath = "";
+        public static string SPGPFilePath = "";
 
         public void NewInstallThread(string installPath)
         {
@@ -36,10 +37,10 @@ namespace EnvMgr
                 _form1.DisableInstallButton(false);
 
                 //**COPY INSTALLER FROM NETWORK**
-                string fileName = Path.GetFileName(Form1.fullInstallerPath);
-                string pathToCopy = Path.GetDirectoryName(Form1.SPGPFilePath) + "\\" + Path.GetFileName(Form1.fullInstallerPath);
+                string fileName = Path.GetFileName(fullInstallerPath);
+                string pathToCopy = Path.GetDirectoryName(SPGPFilePath) + "\\" + Path.GetFileName(fullInstallerPath);
                 string tempInstaller = Environment.CurrentDirectory + @"\Installers\" + fileName;
-                string truePath = Path.GetDirectoryName(Form1.SPGPFilePath);
+                string truePath = Path.GetDirectoryName(SPGPFilePath);
                 File.Copy(pathToCopy, tempInstaller, true);
 
                 //**SILENTLY INSTALLING SPGP
@@ -72,8 +73,8 @@ namespace EnvMgr
                 key.SetValue("zLastSPGPInstallLocal", installPath);
 
                 //**IF DLL CHECKBOX CHECKED COPY X DLLs
-                string extPath = truePath + "\\ExtModules\\" + Form1.selectedProductVersion + "\\";
-                string custPath = truePath + "\\CustomModules\\" + Form1.selectedProductVersion + "\\";
+                string extPath = truePath + "\\ExtModules\\" + selectedProductVersion + "\\";
+                string custPath = truePath + "\\CustomModules\\" + selectedProductVersion + "\\";
                 List<string> extendedDllToAdd = new List<string>();
                 List<string> customDllToAdd = new List<string>();
                 List<string> finalExtDLL = new List<string>();
@@ -160,7 +161,7 @@ namespace EnvMgr
                     {
                         foreach (string dll in finalExtDLL)
                         {
-                            File.Copy(truePath + "\\ExtModules\\" + Form1.selectedProductVersion + "\\SalesPad.Module." + dll, Environment.CurrentDirectory + @"\DLLs\SalesPad.Module." + dll, true);
+                            File.Copy(truePath + "\\ExtModules\\" + selectedProductVersion + "\\SalesPad.Module." + dll, Environment.CurrentDirectory + @"\DLLs\SalesPad.Module." + dll, true);
                             using (StreamWriter extLog = File.AppendText(Environment.CurrentDirectory + @"\Files\InstallLog.txt"))
                             {
                                 extLog.WriteLine("\tExtended - SalesPad.Module." + dll.Remove(dll.Length - 4));
@@ -171,7 +172,7 @@ namespace EnvMgr
                     {
                         foreach (string dll in finalCustDLL)
                         {
-                            File.Copy(truePath + "\\CustomModules\\" + Form1.selectedProductVersion + "\\SalesPad.Module." + dll, Environment.CurrentDirectory + @"\DLLs\SalesPad.Module." + dll, true);
+                            File.Copy(truePath + "\\CustomModules\\" + selectedProductVersion + "\\SalesPad.Module." + dll, Environment.CurrentDirectory + @"\DLLs\SalesPad.Module." + dll, true);
                             using (StreamWriter custLog = File.AppendText(Environment.CurrentDirectory + @"\Files\InstallLog.txt"))
                             {
                                 custLog.WriteLine("\tCustom - SalesPad.Module." + dll.Remove(dll.Length - 4));
@@ -200,17 +201,17 @@ namespace EnvMgr
                 {
                     foreach (string extendedDLL in lbExtendedDLLList.SelectedItems)
                     {
-                        if (Form1.selectedProductVersion == "x86")
+                        if (selectedProductVersion == "x86")
                         {
-                            File.Copy(truePath + "\\ExtModules\\" + x86 + "\\SalesPad.Module." + extendedDLL, Environment.CurrentDirectory + @"\DLLs\SalesPad.Module." + extendedDLL, true);
+                            File.Copy(truePath + @"\ExtModules\x86\SalesPad.Module." + extendedDLL, Environment.CurrentDirectory + @"\DLLs\SalesPad.Module." + extendedDLL, true);
                         }
-                        if (Form1.selectedProductVersion == "x64")
+                        if (selectedProductVersion == "x64")
                         {
-                            File.Copy(truePath + "\\ExtModules\\" + x64 + "\\SalesPad.Module." + extendedDLL, Environment.CurrentDirectory + @"\DLLs\SalesPad.Module." + extendedDLL, true);
+                            File.Copy(truePath + @"\ExtModules\x64\SalesPad.Module." + extendedDLL, Environment.CurrentDirectory + @"\DLLs\SalesPad.Module." + extendedDLL, true);
                         }
-                        else if (Form1.selectedProductVersion == "Pre")
+                        else if (selectedProductVersion == "Pre")
                         {
-                            File.Copy(truePath + "\\ExtModules\\WithoutCardControl\\SalesPad.Module." + extendedDLL, Environment.CurrentDirectory + @"\DLLs\SalesPad.Module." + extendedDLL, true);
+                            File.Copy(truePath + @"\ExtModules\WithoutCardControl\SalesPad.Module." + extendedDLL, Environment.CurrentDirectory + @"\DLLs\SalesPad.Module." + extendedDLL, true);
                         }
                         //Log Extended DLLs
                         if (!finalExtDLL.Contains(extendedDLL))
@@ -223,17 +224,17 @@ namespace EnvMgr
                 {
                     foreach (string customDLL in lbCustomDLLList.SelectedItems)
                     {
-                        if (Form1.selectedProductVersion == "x86")
+                        if (selectedProductVersion == "x86")
                         {
-                            File.Copy(truePath + "\\CustomModules\\" + x86 + "\\SalesPad.Module." + customDLL, Environment.CurrentDirectory + @"\DLLs\SalesPad.Module." + customDLL, true);
+                            File.Copy(truePath + @"\CustomModules\x86\SalesPad.Module." + customDLL, Environment.CurrentDirectory + @"\DLLs\SalesPad.Module." + customDLL, true);
                         }
-                        if (Form1.selectedProductVersion == "x64")
+                        if (selectedProductVersion == "x64")
                         {
-                            File.Copy(truePath + "\\CustomModules\\" + x64 + "\\SalesPad.Module." + customDLL, Environment.CurrentDirectory + @"\DLLs\SalesPad.Module." + customDLL, true);
+                            File.Copy(truePath + @"\CustomModules\x64\SalesPad.Module." + customDLL, Environment.CurrentDirectory + @"\DLLs\SalesPad.Module." + customDLL, true);
                         }
-                        else if (Form1.selectedProductVersion == "Pre")
+                        else if (selectedProductVersion == "Pre")
                         {
-                            File.Copy(truePath + "\\CustomModules\\WithoutCardControl\\SalesPad.Module." + customDLL, Environment.CurrentDirectory + @"\DLLs\SalesPad.Module." + customDLL, true);
+                            File.Copy(truePath + @"\CustomModules\WithoutCardControl\SalesPad.Module." + customDLL, Environment.CurrentDirectory + @"\DLLs\SalesPad.Module." + customDLL, true);
                         }
                         //Log Custom DLLs
                         if (!finalCustDLL.Contains(customDLL))
@@ -331,8 +332,8 @@ namespace EnvMgr
 
         private void SPGPInstall_Load(object sender, EventArgs e)
         {
-            tbSelectedBuild.Text = Path.GetDirectoryName(Form1.SPGPFilePath);
-            string truePath = Path.GetDirectoryName(Form1.SPGPFilePath);
+            tbSelectedBuild.Text = Path.GetDirectoryName(SPGPFilePath);
+            string truePath = Path.GetDirectoryName(SPGPFilePath);
             string toInstall = truePath.Remove(0, 43);
 
             //Load Checkbox values from registry
@@ -343,15 +344,15 @@ namespace EnvMgr
                 checkLaunchAfterInstall.Checked = true;
             }
 
-            if (Form1.selectedProductVersion == "x86" || Form1.selectedProductVersion == "Pre")
+            if (selectedProductVersion == "x86" || selectedProductVersion == "Pre")
             {
                 tbInstallLocation.Text = @"C:\Program Files (x86)\SalesPad.Desktop\" + toInstall;
-                string[] eDLLList = Directory.GetFiles(truePath + @"\ExtModules\" + x86);
+                string[] eDLLList = Directory.GetFiles(truePath + @"\ExtModules\x86");
                 foreach (string eDLL in eDLLList)
                 {
                     lbExtendedDLLList.Items.Add(eDLL.Remove(0, truePath.Length + 32));
                 }
-                string[] cDLLList = Directory.GetFiles(truePath + @"\CustomModules\" + x86);
+                string[] cDLLList = Directory.GetFiles(truePath + @"\CustomModules\x86");
                 foreach (string cDLL in cDLLList)
                 {
                     lbCustomDLLList.Items.Add(cDLL.Remove(0, truePath.Length + 35));
@@ -360,12 +361,12 @@ namespace EnvMgr
             else
             {
                 tbInstallLocation.Text = @"C:\Program Files\SalesPad.Desktop\" + toInstall;
-                string[] eDLLList = Directory.GetFiles(truePath + @"\ExtModules\" + x64);
+                string[] eDLLList = Directory.GetFiles(truePath + @"\ExtModules\x64");
                 foreach (string eDLL in eDLLList)
                 {
                     lbExtendedDLLList.Items.Add(eDLL.Remove(0, truePath.Length + 32));
                 }
-                string[] cDLLList = Directory.GetFiles(truePath + @"\CustomModules\" + x64);
+                string[] cDLLList = Directory.GetFiles(truePath + @"\CustomModules\x64");
                 foreach (string cDLL in cDLLList)
                 {
                     lbCustomDLLList.Items.Add(cDLL.Remove(0, truePath.Length + 35));

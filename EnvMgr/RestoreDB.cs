@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -22,6 +23,9 @@ namespace EnvMgr
             InitializeComponent();
             _form1 = form1;
         }
+
+        public static string selectedGPVersion = "";
+        public static string dbToRestore = "";
 
         public void RestoreDatabase(string[] selectedFiles, string filePath, string backupName)
         {
@@ -42,6 +46,10 @@ namespace EnvMgr
                 _form1.DisableSQLControls(true);
                 return;
             }
+
+            //Unzip database
+            ZipFile.ExtractToDirectory(filePath + ".zip", filePath);
+
             foreach (string server in runningSQLServer)
             {
                 try
@@ -59,7 +67,6 @@ namespace EnvMgr
                         catch (Exception restoreError)
                         {
                             string errorMessage = "There was an error restoring \"" + file + "\".";
-                            //ExceptionHandling.LogException(restoreError.ToString(), errorMessage);
                             try
                             {
                                 ExceptionHandling.LogException2("Restore Database", "System.Data.SqlClient.SqlException", restoreError.Message, restoreError.Source, restoreError.StackTrace);
@@ -78,7 +85,6 @@ namespace EnvMgr
                 catch (Exception sqlConnectionError)
                 {
                     string errorMessage = "Could not connect to the SQL Server. Please verify your SQL Server is running and try again.";
-                    //ExceptionHandling.LogException(sqlConnectionError.ToString(), errorMessage);
                     try
                     {
                         ExceptionHandling.LogException2("Restore Database", "System.Data.SqlClient.SqlException", sqlConnectionError.Message, sqlConnectionError.Source, sqlConnectionError.StackTrace);
@@ -93,6 +99,9 @@ namespace EnvMgr
                     return;
                 }
             }
+
+            //Delete the backup folder.
+            Directory.Delete(filePath);
 
             using (StreamWriter sw = File.AppendText(Environment.CurrentDirectory + @"\Files\Database Log.txt"))
             {
@@ -112,13 +121,17 @@ namespace EnvMgr
         private void RestoreDB_Load(object sender, EventArgs e)
         {
             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
-            string dbFolderPath = Convert.ToString(key.GetValue("DB Folder")) + Form1.selectedGPVersion + "\\" + Form1.dbToRestore;
-            string[] selectedBackup = Directory.GetFiles(dbFolderPath);
-            foreach (string file in selectedBackup)
+            string dbFolderPath = Convert.ToString(key.GetValue("DB Folder")) + selectedGPVersion + "\\" + dbToRestore;
+
+            //Get files in zip file
+            using (ZipArchive archive = ZipFile.OpenRead(dbFolderPath + ".zip"))
             {
-                if (file.Contains(".bak"))
+                foreach (ZipArchiveEntry entry in archive.Entries)
                 {
-                    lbDatabaseList.Items.Add(Path.GetFileNameWithoutExtension(file));
+                    if (entry.Name != "Description.txt")
+                    {
+                        lbDatabaseList.Items.Add(Path.GetFileNameWithoutExtension(entry.FullName));
+                    }
                 }
             }
         }
@@ -126,8 +139,8 @@ namespace EnvMgr
         private void btnRestore_Click(object sender, EventArgs e)
         {
             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
-            string filePath = Convert.ToString(key.GetValue("DB Folder")) + Form1.selectedGPVersion + "\\" + Form1.dbToRestore;
-            string backupName = Form1.dbToRestore;
+            string filePath = Convert.ToString(key.GetValue("DB Folder")) + selectedGPVersion + "\\" + dbToRestore;
+            string backupName = dbToRestore;
 
             if (lbDatabaseList.SelectedItems.Count == 0)
             {

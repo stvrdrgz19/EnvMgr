@@ -70,6 +70,8 @@
             this.tbTenantName = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.button1 = new System.Windows.Forms.Button();
@@ -234,9 +236,9 @@
             this.cbDBMethod.ForeColor = System.Drawing.SystemColors.ControlText;
             this.cbDBMethod.Location = new System.Drawing.Point(10, 44);
             this.cbDBMethod.Name = "cbDBMethod";
-            this.cbDBMethod.Size = new System.Drawing.Size(299, 17);
+            this.cbDBMethod.Size = new System.Drawing.Size(249, 17);
             this.cbDBMethod.TabIndex = 5;
-            this.cbDBMethod.Text = "Manually Select Databases to Backup/Restore/Overwrite";
+            this.cbDBMethod.Text = "Manually Select Databases to Backup/Restore";
             this.cbDBMethod.UseVisualStyleBackColor = true;
             this.cbDBMethod.CheckedChanged += new System.EventHandler(this.cbDBMethod_CheckedChanged);
             // 
@@ -507,6 +509,8 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.label17);
+            this.groupBox4.Controls.Add(this.label16);
             this.groupBox4.Controls.Add(this.checkBox1);
             this.groupBox4.Controls.Add(this.checkBox2);
             this.groupBox4.Controls.Add(this.button1);
@@ -532,12 +536,34 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Build Management";
             // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label17.ForeColor = System.Drawing.SystemColors.ActiveBorder;
+            this.label17.Location = new System.Drawing.Point(259, 161);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(59, 13);
+            this.label17.TabIndex = 35;
+            this.label17.Text = "Non SPGP";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.ForeColor = System.Drawing.SystemColors.ActiveBorder;
+            this.label16.Location = new System.Drawing.Point(260, 142);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(59, 13);
+            this.label16.TabIndex = 34;
+            this.label16.Text = "Non SPGP";
+            // 
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
             this.checkBox1.Enabled = false;
             this.checkBox1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.checkBox1.Location = new System.Drawing.Point(9, 162);
+            this.checkBox1.Location = new System.Drawing.Point(9, 160);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(255, 17);
             this.checkBox1.TabIndex = 33;
@@ -549,7 +575,7 @@
             this.checkBox2.AutoSize = true;
             this.checkBox2.Enabled = false;
             this.checkBox2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.checkBox2.Location = new System.Drawing.Point(9, 139);
+            this.checkBox2.Location = new System.Drawing.Point(9, 141);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(204, 17);
             this.checkBox2.TabIndex = 32;
@@ -787,5 +813,7 @@
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label16;
     }
 }

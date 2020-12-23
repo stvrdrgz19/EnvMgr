@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -18,6 +19,7 @@ namespace EnvMgr
     {
         private Form1 _form1;
         public static bool stopProcess = false;
+        public static string selectedGPVersion = "";
 
         public NewDBBackup(Form1 form1)
         {
@@ -113,6 +115,12 @@ namespace EnvMgr
             {
                 sw.WriteLine("{" + DateTime.Now + "} - CREATED: " + bakName);
             }
+
+            //Zip DB Folder
+            ZipFile.CreateFromDirectory(dbPath, dbPath + ".zip");
+            //Delete dbPath
+            Directory.Delete(dbPath, true);
+
             string newMessage = "Backup \"" + bakName + "\" was created successfully.";
             string newCaption = "COMPLETE";
             MessageBoxButtons newButtons = MessageBoxButtons.OK;
@@ -136,7 +144,7 @@ namespace EnvMgr
             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
             string dbFolderPath = Convert.ToString(key.GetValue("DB Folder"));
 
-            if (Directory.Exists(dbFolderPath + Form1.selectedGPVersion + "\\" + backupName))
+            if (Directory.Exists(dbFolderPath + selectedGPVersion + "\\" + backupName + ".zip"))
             {
                 MessageBox.Show("A backup called \"" + backupName + "\" already exists! Please enter a unique backup name to continue.");
                 return;
@@ -170,7 +178,7 @@ namespace EnvMgr
             }
 
             RegistryKey key2 = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
-            string dbPath = Convert.ToString(key2.GetValue("DB Folder")) + Form1.selectedGPVersion + "\\" + backupName;
+            string dbPath = Convert.ToString(key2.GetValue("DB Folder")) + selectedGPVersion + "\\" + backupName;
             string dynamicsDB = Convert.ToString(key2.GetValue("Dynamics Database"));
             string nonMBDB = Convert.ToString(key2.GetValue("Non-MB Database"));
             string mbDB = Convert.ToString(key2.GetValue("MB Database"));

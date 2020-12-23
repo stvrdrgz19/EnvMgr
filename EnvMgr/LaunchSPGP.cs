@@ -19,9 +19,11 @@ namespace EnvMgr
             InitializeComponent();
         }
 
+        public static string selectedProductVersion = "";
+
         private void LaunchSPGP_Load(object sender, EventArgs e)
         {
-            if (Form1.selectedProductVersion == "x86" || Form1.selectedProductVersion == "Pre")
+            if (selectedProductVersion == "x86" || selectedProductVersion == "Pre")
             {
                 string[] text = Directory.GetFiles(@"C:\Program Files (x86)\SalesPad.Desktop\", @"*SalesPad.exe", SearchOption.AllDirectories);
                 foreach (string t in text)
@@ -30,7 +32,7 @@ namespace EnvMgr
                     InstalledBuilds.Items.Add(pathWithoutExe);
                 }
             }
-            else if (Form1.selectedProductVersion == "x64")
+            else if (selectedProductVersion == "x64")
             {
                 string[] text = Directory.GetFiles(@"C:\Program Files\SalesPad.Desktop\", @"*SalesPad.exe", SearchOption.AllDirectories);
                 foreach (string t in text)
