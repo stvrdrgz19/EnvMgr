@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.ServiceProcess;
@@ -33,16 +34,6 @@ namespace EnvMgr
         public static string sqlServer2016 = @"MSSQL$SQLSERVER2016";
         public static string sqlServer2017 = @"MSSQL$SQLSERVER2017";
         public static string sqlServer2019 = @"MSSQL$SQLSERVER2019";
-        public static string dbToCreate = "";
-        public static string selectedGPVersion = "";
-        public static string selectedInstallProduct = "";
-        public static string selectedProductVersion = "";
-        public static string fullInstallerPath = "";
-        public static string SPGPFilePath = "";
-        public static string ProductFilePath = "";
-        public static string ProductFileName = "";
-        public static string dbToRestore = "";
-        public static string dbToOverwrite = "";
 
         private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
         {
@@ -208,10 +199,10 @@ namespace EnvMgr
             }
             try
             {
-                string[] dbFolders = Directory.GetDirectories(dbFolderPath);
-                foreach (string folder in dbFolders)
+                string[] dbFiles = Directory.GetFiles(dbFolderPath);
+                foreach (string file in dbFiles)
                 {
-                    cbDatabaseList.Items.Add(folder.Remove(0, dbFolderPath.Length + 1));
+                    cbDatabaseList.Items.Add(Path.GetFileNameWithoutExtension(file));
                 }
             }
             catch (Exception error)
@@ -220,13 +211,33 @@ namespace EnvMgr
             }
         }
 
-        private void LoadDatabaseDescription(string database)
+        public string LoadDatabaseDescription(string database)
         {
             string selectedGP = cbSelectedGP.Text;
             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
             string dbFolderPath = Convert.ToString(key.GetValue("DB Folder")) + selectedGP;
-            string dbDescription = File.ReadAllText(dbFolderPath + "\\" + database + @"\Description.txt");
-            tbDBDesc.Text = dbDescription;
+            string zipPath = dbFolderPath + "\\" + database + ".zip";
+
+            try
+            {
+                using (FileStream zipToOpen = new FileStream(zipPath, FileMode.Open))
+                {
+                    using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Read))
+                    {
+                        ZipArchiveEntry descEntry = archive.GetEntry("Description.txt");
+                        using (StreamReader reader = new StreamReader(descEntry.Open()))
+                        {
+                            return reader.ReadToEnd();
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("There was an error loading the description file for the selected database: \n\n" + e.ToString());
+                tbDBDesc.Text = dbDescDefault;
+                return String.Empty;
+            }
         }
 
         public List<string> InstalledSQLServers()
@@ -326,15 +337,15 @@ namespace EnvMgr
         {
             lvInstalledSQLServers.Items.Clear();
 
+            string val2008 = IsServiceRunning("MSSQL$SQLSERVER2008");
             string val2012 = IsServiceRunning("MSSQL$SQLSERVER2012");
             string val2014 = IsServiceRunning("MSSQL$SQLSERVER2014");
             string val2016 = IsServiceRunning("MSSQL$SQLSERVER2016");
             string val2017 = IsServiceRunning("MSSQL$SQLSERVER2017");
             string val2019 = IsServiceRunning("MSSQL$SQLSERVER2019");
 
-
-            ListViewItem item1 = new ListViewItem("SQLSERVER2012");
-            switch (val2012)
+            ListViewItem item1 = new ListViewItem("SQLSERVER2008");
+            switch (val2008)
             {
                 case "NOT INSTALLED":
                     item1.ForeColor = Color.Gray;
@@ -348,9 +359,9 @@ namespace EnvMgr
                     item1.Font = new Font(this.Font, FontStyle.Bold);
                     break;
             }
-            item1.SubItems.Add(val2012);
-            ListViewItem item2 = new ListViewItem("SQLSERVER2014");
-            switch (val2014)
+            item1.SubItems.Add(val2008);
+            ListViewItem item2 = new ListViewItem("SQLSERVER2012");
+            switch (val2012)
             {
                 case "NOT INSTALLED":
                     item2.ForeColor = Color.Gray;
@@ -364,9 +375,9 @@ namespace EnvMgr
                     item2.Font = new Font(this.Font, FontStyle.Bold);
                     break;
             }
-            item2.SubItems.Add(val2014);
-            ListViewItem item3 = new ListViewItem("SQLSERVER2016");
-            switch (val2016)
+            item2.SubItems.Add(val2012);
+            ListViewItem item3 = new ListViewItem("SQLSERVER2014");
+            switch (val2014)
             {
                 case "NOT INSTALLED":
                     item3.ForeColor = Color.Gray;
@@ -380,9 +391,9 @@ namespace EnvMgr
                     item3.Font = new Font(this.Font, FontStyle.Bold);
                     break;
             }
-            item3.SubItems.Add(val2016);
-            ListViewItem item4 = new ListViewItem("SQLSERVER2017");
-            switch (val2017)
+            item3.SubItems.Add(val2014);
+            ListViewItem item4 = new ListViewItem("SQLSERVER2016");
+            switch (val2016)
             {
                 case "NOT INSTALLED":
                     item4.ForeColor = Color.Gray;
@@ -396,9 +407,9 @@ namespace EnvMgr
                     item4.Font = new Font(this.Font, FontStyle.Bold);
                     break;
             }
-            item4.SubItems.Add(val2017);
-            ListViewItem item5 = new ListViewItem("SQLSERVER2019");
-            switch (val2019)
+            item4.SubItems.Add(val2016);
+            ListViewItem item5 = new ListViewItem("SQLSERVER2017");
+            switch (val2017)
             {
                 case "NOT INSTALLED":
                     item5.ForeColor = Color.Gray;
@@ -412,8 +423,24 @@ namespace EnvMgr
                     item5.Font = new Font(this.Font, FontStyle.Bold);
                     break;
             }
-            item5.SubItems.Add(val2019);
-            lvInstalledSQLServers.Items.AddRange(new ListViewItem[] { item1, item2, item3, item4, item5 });
+            item5.SubItems.Add(val2017);
+            ListViewItem item6 = new ListViewItem("SQLSERVER2019");
+            switch (val2019)
+            {
+                case "NOT INSTALLED":
+                    item6.ForeColor = Color.Gray;
+                    item6.Font = new Font(this.Font, FontStyle.Italic);
+                    break;
+                case "NOT RUNNING":
+                    item6.ForeColor = Color.Gray;
+                    break;
+                case "RUNNING":
+                    item6.ForeColor = Color.Green;
+                    item6.Font = new Font(this.Font, FontStyle.Bold);
+                    break;
+            }
+            item6.SubItems.Add(val2019);
+            lvInstalledSQLServers.Items.AddRange(new ListViewItem[] { item1, item2, item3, item4, item5, item6 });
         }
 
         private void InstallSQLServer(string sqlVersion)
@@ -594,6 +621,37 @@ namespace EnvMgr
             }
         }
 
+        private void InstallProduct(string product, string buildDir, string ifContains)
+        {
+            using (OpenFileDialog installerSelect = new OpenFileDialog())
+            {
+                installerSelect.Filter = "Executable Files (*.exe)|*.exe";
+                installerSelect.InitialDirectory = buildDir;
+                installerSelect.RestoreDirectory = true;
+
+                if (installerSelect.ShowDialog() == DialogResult.OK)
+                {
+                    string ProductFilePath = Path.GetDirectoryName(installerSelect.FileName);
+                    if (!ProductFilePath.Contains(ifContains))
+                    {
+                        string message = "The selected installed isn't for the selected product! The selected product is \"" + product + "\"";
+                        string caption = "ERROR";
+                        MessageBoxButtons buttons = MessageBoxButtons.OK;
+                        MessageBoxIcon icon = MessageBoxIcon.Error;
+
+                        MessageBox.Show(message, caption, buttons, icon);
+                        return;
+                    }
+                    string ProductFileName = installerSelect.FileName;
+                    OtherInstall InstallForm = new OtherInstall(this);
+                    OtherInstall.selectedInstallProduct = product;
+                    OtherInstall.ProductFileName = ProductFileName;
+                    OtherInstall.ProductFilePath = ProductFilePath;
+                    InstallForm.Show();
+                }
+            }
+        }
+
         //================================================================================================================================================
         // DATABASE MANAGEMENT METHODS
         //================================================================================================================================================
@@ -629,7 +687,7 @@ namespace EnvMgr
             return tf;
         }
 
-        public void RestoreDB(string dbName, string gpVersion)
+        public void RestoreDatabase(string dbName, string gpVersion)
         {
             DisableDBControls(false);
             DisableSQLControls(false);
@@ -648,27 +706,63 @@ namespace EnvMgr
                 if (runningSQLServer.Count > 1)
                 {
                     MessageBox.Show("There are multiple sql servers running. Please stop any sql servers not being used. Environment Manager will target the remaining running sql server.");
+                    DisableDBControls(true);
+                    DisableSQLControls(true);
                     return;
                 }
                 if (runningSQLServer.Count == 0)
                 {
                     MessageBox.Show("There are no sql servers running. Please start a sql server and try again.");
+                    DisableDBControls(true);
+                    DisableSQLControls(true);
                     return;
                 }
-                foreach (string server in runningSQLServer)
+
+                //Unzip Database Backup zip file.
+                try
                 {
-                    SqlConnection sqlCon = new SqlConnection(@"Data Source=" + Environment.MachineName + "\\" + server + @";Initial Catalog=MASTER;User ID=sa;Password=sa;");
-                    SqlDataAdapter restoreDynScript = new SqlDataAdapter(dynamicsScript, sqlCon);
-                    DataTable restoreDynTable = new DataTable();
-                    restoreDynScript.Fill(restoreDynTable);
+                    ZipFile.ExtractToDirectory(dbPath + ".zip", dbPath);
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.ToString());
+                    return;
+                }
 
-                    SqlDataAdapter restoreNonMBScript = new SqlDataAdapter(nonMBScript, sqlCon);
-                    DataTable restoreNonMBTable = new DataTable();
-                    restoreNonMBScript.Fill(restoreNonMBTable);
+                try
+                {
+                    foreach (string server in runningSQLServer)
+                    {
+                        SqlConnection sqlCon = new SqlConnection(@"Data Source=" + Environment.MachineName + "\\" + server + @";Initial Catalog=MASTER;User ID=sa;Password=sa;");
+                        SqlDataAdapter restoreDynScript = new SqlDataAdapter(dynamicsScript, sqlCon);
+                        DataTable restoreDynTable = new DataTable();
+                        restoreDynScript.Fill(restoreDynTable);
 
-                    SqlDataAdapter restoreMBScript = new SqlDataAdapter(mbScript, sqlCon);
-                    DataTable restoreMBTable = new DataTable();
-                    restoreMBScript.Fill(restoreMBTable);
+                        SqlDataAdapter restoreNonMBScript = new SqlDataAdapter(nonMBScript, sqlCon);
+                        DataTable restoreNonMBTable = new DataTable();
+                        restoreNonMBScript.Fill(restoreNonMBTable);
+
+                        SqlDataAdapter restoreMBScript = new SqlDataAdapter(mbScript, sqlCon);
+                        DataTable restoreMBTable = new DataTable();
+                        restoreMBScript.Fill(restoreMBTable);
+                    }
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.ToString());
+                    return;
+                }
+
+
+                //Remove the recently unzipped directory.
+                try
+                {
+                    Directory.Delete(dbPath, true);
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.ToString());
+                    return;
                 }
             }
             catch (SqlException)
@@ -959,7 +1053,7 @@ namespace EnvMgr
             try
             {
                 string selectedDB = cbDatabaseList.SelectedItem.ToString();
-                LoadDatabaseDescription(selectedDB);
+                tbDBDesc.Text = LoadDatabaseDescription(selectedDB);
             }
             catch
             {
@@ -971,77 +1065,71 @@ namespace EnvMgr
         private void btnDBBackupFolder_Click(object sender, EventArgs e)
         {
             string selectedGP = cbSelectedGP.Text;
-            string selectedBackup = cbDatabaseList.Text;
-            bool isGPSelected = true;
-            bool isDBSelected = true;
-            if (selectedGP == "Select GP")
-            {
-                isGPSelected = false;
-            }
-            if (selectedBackup == "Select a Database")
-            {
-                isDBSelected = false;
-            }
-            if (isGPSelected == false || isDBSelected == false)
-            {
-                string message = "Please select both a GP Version and backup from the list to open it's folder.";
-                string caption = "ERROR";
-                MessageBoxButtons buttons = MessageBoxButtons.OK;
-                MessageBoxIcon icon = MessageBoxIcon.Error;
-                DialogResult result;
-
-                result = MessageBox.Show(message, caption, buttons, icon);
-                return;
-            }
             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
-            if (Control.ModifierKeys == Keys.Shift)
+            string gpBasePath = Convert.ToString(key.GetValue("DB Folder"));
+            string selectedGPPath = gpBasePath + selectedGP;
+
+            List<string> gpVersList = new List<string>();
+            gpVersList.Add("GP10");
+            gpVersList.Add("GP2010");
+            gpVersList.Add("GP2013");
+            gpVersList.Add("GP2015");
+            gpVersList.Add("GP2016");
+            gpVersList.Add("GP2018");
+            gpVersList.Add("GP2019");
+            if (!gpVersList.Contains(selectedGP))
             {
-                cbDatabaseList.Items.Clear();
-                string gpDBFolderPath = Convert.ToString(key.GetValue("DB Folder")) + selectedGP;
-                if (!Directory.Exists(gpDBFolderPath))
-                {
-                    MessageBox.Show("The directory for the selected backup doesn't exist!");
-                    return;
-                }
-                try
-                {
-                    Process.Start(gpDBFolderPath);
-                    return;
-                }
-                catch (Exception error)
-                {
-                    MessageBox.Show(error.ToString());
-                }
-                return;
+                Process.Start(gpBasePath);
             }
-            string dbFolderPath = Convert.ToString(key.GetValue("DB Folder")) + selectedGP + "\\" + selectedBackup;
-            if (!Directory.Exists(dbFolderPath))
+            else
             {
-                MessageBox.Show("The directory for the selected backup doesn't exist!");
-                return;
-            }
-            try
-            {
-                Process.Start(dbFolderPath);
-                return;
-            }
-            catch (Exception error)
-            {
-                MessageBox.Show(error.ToString());
+                Process.Start(selectedGPPath);
             }
             return;
         }
 
         private void btnDBBackupDescription_Click(object sender, EventArgs e)
         {
-            //
+            string selectedGP = cbSelectedGP.Text;
+            string selectedBackup = cbDatabaseList.Text;
+            string dbDesc = tbDBDesc.Text;
+            if (dbDesc == dbDescDefault)
+            {
+                return;
+            }
+            if (dbDesc == "Select a Database")
+            {
+                MessageBox.Show("Select a database backup.");
+                return;
+            }
+            try
+            {
+                DBDesc dbDescForm = new DBDesc();
+                DBDesc.selectedGP = selectedGP;
+                DBDesc.dbName = selectedBackup;
+                DBDesc.existingDesc = LoadDatabaseDescription(selectedBackup);
+                dbDescForm.FormClosing += new FormClosingEventHandler(DBDescFormClosing);
+                dbDescForm.Show();
+            }
+            catch (Exception eX)
+            {
+                MessageBox.Show("There was an error: \n\n" + eX.ToString());
+            }
+            return;
+        }
+        private void DBDescFormClosing(object sender, FormClosingEventArgs e)
+        {
+            cbDatabaseList.Items.Clear();
+            cbDatabaseList.Text = "Select a Database";
+            tbDBDesc.Text = dbDescDefault;
+            LoadDatabaseList();
             return;
         }
 
         private void btnRestoreDB_Click(object sender, EventArgs e)
         {
-            selectedGPVersion = cbSelectedGP.Text;
-            dbToRestore = cbDatabaseList.Text;
+            string dbToRestore = cbDatabaseList.Text;
+            string selectedGPVersion = cbSelectedGP.Text;
             bool isDBSelected = IsDBSelected(dbToRestore);
             if (isDBSelected == false)
             {
@@ -1061,12 +1149,14 @@ namespace EnvMgr
                 if (DBMethod)
                 {
                     RestoreDB restoreDB = new RestoreDB(this);
+                    RestoreDB.dbToRestore = dbToRestore;
+                    RestoreDB.selectedGPVersion = cbSelectedGP.Text;
                     restoreDB.FormClosing += new FormClosingEventHandler(RestoreDBBackupFormClosing);
                     restoreDB.Show();
                 }
                 if (!DBMethod)
                 {
-                    Thread restoreDB = new Thread(() => RestoreDB(dbToRestore, selectedGPVersion));
+                    Thread restoreDB = new Thread(() => RestoreDatabase(dbToRestore, selectedGPVersion));
                     restoreDB.Start();
                     return;
                 }
@@ -1075,14 +1165,13 @@ namespace EnvMgr
         }
         private void RestoreDBBackupFormClosing(object sender, FormClosingEventArgs e)
         {
-            selectedGPVersion = "";
-            dbToRestore = "";
+            return;
         }
 
         private void btnOverwriteDB_Click(object sender, EventArgs e)
         {
-            dbToOverwrite = cbDatabaseList.Text;
-            selectedGPVersion = cbSelectedGP.Text;
+            string dbToOverwrite = cbDatabaseList.Text;
+            string selectedGPVersion = cbSelectedGP.Text;
             bool isDBSelected = IsDBSelected(dbToOverwrite);
             if (isDBSelected == false)
             {
@@ -1097,20 +1186,32 @@ namespace EnvMgr
             Result = MessageBox.Show(Message, Caption, Buttons, Icon);
             if (Result == DialogResult.Yes)
             {
-                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
-                bool DBMethod = Convert.ToBoolean(key.GetValue("DB Method"));
-                if (DBMethod)
-                {
-                    OverwriteBackupSelect overwriteBackupSelect = new OverwriteBackupSelect(this);
-                    overwriteBackupSelect.FormClosing += new FormClosingEventHandler(overwriteBackupFormClosing);
-                    overwriteBackupSelect.Show();
-                }
-                if (!DBMethod)
-                {
-                    OverwriteBackup overwriteBackup = new OverwriteBackup(this);
-                    overwriteBackup.FormClosing += new FormClosingEventHandler(overwriteBackupFormClosing);
-                    overwriteBackup.Show();
-                }
+                // GOTTA FIGURE OUT A WAY TO HANDLE THIS SETTING FOR THE ZIPPED FILE
+                // SOMETHING LIKE UNZIP, BACKUP, REPLACE FILES, RE-ZIP, DELETE
+                //***************************************************************************************************
+                //RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
+                //bool DBMethod = Convert.ToBoolean(key.GetValue("DB Method"));
+                //if (DBMethod)
+                //{
+                //    OverwriteBackupSelect overwriteBackupSelect = new OverwriteBackupSelect(this);
+                //    OverwriteBackupSelect.selectedGPVersion = selectedGPVersion;
+                //    OverwriteBackupSelect.dbToOverwrite = dbToOverwrite;
+                //    overwriteBackupSelect.FormClosing += new FormClosingEventHandler(overwriteBackupFormClosing);
+                //    overwriteBackupSelect.Show();
+                //}
+                //if (!DBMethod)
+                //{
+                //    OverwriteBackup overwriteBackup = new OverwriteBackup(this);
+                //    OverwriteBackup.selectedGPVersion = selectedGPVersion;
+                //    OverwriteBackup.dbToCreate = dbToOverwrite;
+                //    overwriteBackup.FormClosing += new FormClosingEventHandler(overwriteBackupFormClosing);
+                //    overwriteBackup.Show();
+                //}
+                OverwriteBackup overwriteBackup = new OverwriteBackup(this);
+                OverwriteBackup.selectedGPVersion = selectedGPVersion;
+                OverwriteBackup.dbToCreate = dbToOverwrite;
+                overwriteBackup.FormClosing += new FormClosingEventHandler(overwriteBackupFormClosing);
+                overwriteBackup.Show();
             }
             return;
         }
@@ -1119,14 +1220,13 @@ namespace EnvMgr
             cbDatabaseList.Items.Clear();
             cbDatabaseList.Text = "Select a Database";
             tbDBDesc.Text = dbDescDefault;
-            dbToOverwrite = "";
-            selectedGPVersion = "";
             LoadDatabaseList();
+            return;
         }
 
         private void btnNewDB_Click(object sender, EventArgs e)
         {
-            selectedGPVersion = cbSelectedGP.Text;
+            string selectedGPVersion = cbSelectedGP.Text;
             if (String.IsNullOrWhiteSpace(selectedGPVersion))
             {
                 MessageBox.Show("Please select a GP version before creating a database backup.");
@@ -1146,12 +1246,14 @@ namespace EnvMgr
                 if (DBMethod)
                 {
                     NewDBBackupSelect newDBBackupSelect = new NewDBBackupSelect(this);
+                    NewDBBackupSelect.selectedGPVersion = cbSelectedGP.Text;
                     newDBBackupSelect.FormClosing += new FormClosingEventHandler(ClosingNewDBBackup);
                     newDBBackupSelect.Show();
                 }
                 if (!DBMethod)
                 {
                     NewDBBackup newDBBackup = new NewDBBackup(this);
+                    NewDBBackup.selectedGPVersion = cbSelectedGP.Text;
                     newDBBackup.FormClosing += new FormClosingEventHandler(ClosingNewDBBackup);
                     newDBBackup.Show();
                 }
@@ -1166,7 +1268,6 @@ namespace EnvMgr
                 cbSelectedGP.Text = "Select GP";
                 cbDatabaseList.Text = "Select a Database";
                 tbDBDesc.Text = dbDescDefault;
-                selectedGPVersion = "";
                 return;
             }
             if (NewDBBackup.stopProcess == true)
@@ -1233,7 +1334,7 @@ namespace EnvMgr
         private void btnInstallProduct_Click(object sender, EventArgs e)
         {
             string product = cbProductList.Text;
-            selectedProductVersion = cbSPGPVersion.Text;
+            string selectedProductVersion = cbSPGPVersion.Text;
             if (Control.ModifierKeys == Keys.Shift)
             {
                 LastInstalled lastInstalled = new LastInstalled();
@@ -1251,23 +1352,101 @@ namespace EnvMgr
                 errorResult = MessageBox.Show(errorMessage, errorCaption, errorButton, errorIcon);
                 return;
             }
-            if (Control.ModifierKeys == Keys.Control)
+            else if (product == "SalesPad Desktop")
+            {
+                string filePath = "";
+                string fullInstallerPath = "";
+
+                using (OpenFileDialog openFileDialog = new OpenFileDialog())
+                {
+                    if (selectedProductVersion == "x86" || selectedProductVersion == "Pre")
+                    {
+                        openFileDialog.Filter = "Executable Files (*.exe)|*x86.exe";
+                    }
+                    else
+                    {
+                        openFileDialog.Filter = "Executable Files (*.exe)|*x64.exe";
+                    }
+                    openFileDialog.InitialDirectory = @"\\sp-fileserv-01\Shares\Builds\SalesPad.GP\";
+                    openFileDialog.RestoreDirectory = true;
+
+                    if (openFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        filePath = openFileDialog.FileName;
+                        if (!filePath.Contains(@"\SalesPad.GP\"))
+                        {
+                            string message = "The selected installer isn't for the selected product! The selected product is \"" + product + "\"";
+                            string caption = "ERROR";
+                            MessageBoxButtons buttons = MessageBoxButtons.OK;
+                            MessageBoxIcon icon = MessageBoxIcon.Error;
+                            
+                            MessageBox.Show(message, caption, buttons, icon);
+                            return;
+                        }
+                        fullInstallerPath = openFileDialog.FileName;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                SPGPInstall SPGPform = new SPGPInstall(this);
+                SPGPInstall.selectedProductVersion = selectedProductVersion;
+                SPGPInstall.fullInstallerPath = fullInstallerPath;
+                SPGPInstall.SPGPFilePath = filePath;
+                SPGPform.Show();
+            }
+            if (product == "SalesPad Mobile")
+            {
+                InstallProduct(product, @"\\sp-fileserv-01\Shares\Builds\Ares\Mobile-Server\", @"\Mobile-Server\");
+                return;
+            }
+            if (product == "DataCollection")
+            {
+                InstallProduct(product, @"\\sp-fileserv-01\Shares\Builds\Ares\DataCollection\", @"\DataCollection\");
+                return;
+            }
+            if (product == "ShipCenter")
+            {
+                InstallProduct(product, @"\\sp-fileserv-01\Shares\Builds\ShipCenter\", @"\ShipCenter\");
+                return;
+            }
+        }
+
+        private void btnLaunchProduct_Click(object sender, EventArgs e)
+        {
+            string selectedProduct = cbProductList.Text;
+            string selectedInstallProduct = cbProductList.Text;
+            string selectedProductVersion = cbSPGPVersion.Text;
+
+            if (selectedProduct == "Select a Product")
+            {
+                string message = "Please select a product.";
+                string caption = "ERROR";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                MessageBoxIcon icon = MessageBoxIcon.Error;
+                DialogResult result;
+
+                result = MessageBox.Show(message, caption, buttons, icon);
+                return;
+            }
+            if (Control.ModifierKeys == Keys.Shift)
             {
                 string productPath = "";
                 RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
-                if (product == "SalesPad Desktop")
+                if (selectedProduct == "SalesPad Desktop")
                 {
                     productPath = Convert.ToString(key.GetValue("zLastSPGPInstallLocal")) + @"\SalesPad.exe";
                 }
-                if (product == "DataCollection")
+                if (selectedProduct == "DataCollection")
                 {
                     productPath = Convert.ToString(key.GetValue("zLastDCInstallLocal")) + @"\DataCollection Extended Warehouse.exe";
                 }
-                if (product == "SalesPad Mobile")
+                if (selectedProduct == "SalesPad Mobile")
                 {
                     productPath = Convert.ToString(key.GetValue("zLastSPMobileInstallLocal")) + @"\SalesPad.GP.Mobile.Server.exe";
                 }
-                if (product == "ShipCenter")
+                if (selectedProduct == "ShipCenter")
                 {
                     productPath = Convert.ToString(key.GetValue("zLastSCInstallLocal")) + @"\SalesPad.ShipCenter.exe";
                 }
@@ -1291,165 +1470,17 @@ namespace EnvMgr
                 }
                 return;
             }
-            else if (product == "SalesPad Desktop")
-            {
-                string filePath = "";
-
-                using (OpenFileDialog openFileDialog = new OpenFileDialog())
-                {
-                    if (selectedProductVersion == "x86" || selectedProductVersion == "Pre")
-                    {
-                        openFileDialog.Filter = "Executable Files (*.exe)|*x86.exe";
-                    }
-                    else
-                    {
-                        openFileDialog.Filter = "Executable Files (*.exe)|*x64.exe";
-                    }
-                    openFileDialog.InitialDirectory = @"\\sp-fileserv-01\Shares\Builds\SalesPad.GP\";
-                    openFileDialog.RestoreDirectory = true;
-
-                    if (openFileDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        filePath = openFileDialog.FileName;
-                        if (!filePath.Contains(@"\SalesPad.GP\"))
-                        {
-                            string message = "The selected installed isn't for the selected product! The selected product is \"" + product + "\"";
-                            string caption = "ERROR";
-                            MessageBoxButtons buttons = MessageBoxButtons.OK;
-                            MessageBoxIcon icon = MessageBoxIcon.Error;
-                            
-                            MessageBox.Show(message, caption, buttons, icon);
-                            return;
-                        }
-                        fullInstallerPath = openFileDialog.FileName;
-                    }
-                    else
-                    {
-                        return;
-                    }
-                }
-                SPGPFilePath = filePath;
-                SPGPInstall SPGPform = new SPGPInstall(this);
-                SPGPform.Show();
-            }
-            if (product == "SalesPad Mobile")
-            {
-                selectedInstallProduct = cbProductList.Text;
-
-                using (OpenFileDialog installerSelect = new OpenFileDialog())
-                {
-                    installerSelect.Filter = "Executable Files (*.exe)|*.exe";
-                    installerSelect.InitialDirectory = @"\\sp-fileserv-01\Shares\Builds\Ares\Mobile-Server\";
-                    installerSelect.RestoreDirectory = true;
-
-                    if (installerSelect.ShowDialog() == DialogResult.OK)
-                    {
-                        ProductFilePath = Path.GetDirectoryName(installerSelect.FileName);
-                        if (!ProductFilePath.Contains(@"\Mobile-Server\"))
-                        {
-                            string message = "The selected installed isn't for the selected product! The selected product is \"" + product + "\"";
-                            string caption = "ERROR";
-                            MessageBoxButtons buttons = MessageBoxButtons.OK;
-                            MessageBoxIcon icon = MessageBoxIcon.Error;
-
-                            MessageBox.Show(message, caption, buttons, icon);
-                            return;
-                        }
-                        ProductFileName = installerSelect.FileName;
-                        OtherInstall InstallForm = new OtherInstall(this);
-                        InstallForm.Show();
-                    }
-                    return;
-                }
-            }
-            if (product == "DataCollection")
-            {
-                selectedInstallProduct = cbProductList.Text;
-
-                using (OpenFileDialog installerSelect = new OpenFileDialog())
-                {
-                    installerSelect.Filter = "Executable Files (*.exe)|*.exe";
-                    installerSelect.InitialDirectory = @"\\sp-fileserv-01\Shares\Builds\Ares\DataCollection\";
-                    installerSelect.RestoreDirectory = true;
-
-                    if (installerSelect.ShowDialog() == DialogResult.OK)
-                    {
-                        ProductFilePath = Path.GetDirectoryName(installerSelect.FileName);
-                        if (!ProductFilePath.Contains(@"\DataCollection\"))
-                        {
-                            string message = "The selected installed isn't for the selected product! The selected product is \"" + product + "\"";
-                            string caption = "ERROR";
-                            MessageBoxButtons buttons = MessageBoxButtons.OK;
-                            MessageBoxIcon icon = MessageBoxIcon.Error;
-
-                            MessageBox.Show(message, caption, buttons, icon);
-                            return;
-                        }
-                        ProductFileName = installerSelect.FileName;
-                        OtherInstall InstallForm = new OtherInstall(this);
-                        InstallForm.Show();
-                    }
-                    return;
-                }
-            }
-            if (product == "ShipCenter")
-            {
-                selectedInstallProduct = cbProductList.Text;
-
-                using (OpenFileDialog installerSelect = new OpenFileDialog())
-                {
-                    installerSelect.Filter = "Executable Files (*.exe)|*.exe";
-                    installerSelect.InitialDirectory = @"\\sp-fileserv-01\Shares\Builds\ShipCenter\";
-                    installerSelect.RestoreDirectory = true;
-
-                    if (installerSelect.ShowDialog() == DialogResult.OK)
-                    {
-                        ProductFilePath = Path.GetDirectoryName(installerSelect.FileName);
-                        if (!ProductFilePath.Contains(@"\ShipCenter\"))
-                        {
-                            string message = "The selected installed isn't for the selected product! The selected product is \"" + product + "\"";
-                            string caption = "ERROR";
-                            MessageBoxButtons buttons = MessageBoxButtons.OK;
-                            MessageBoxIcon icon = MessageBoxIcon.Error;
-
-                            MessageBox.Show(message, caption, buttons, icon);
-                            return;
-                        }
-                        ProductFileName = installerSelect.FileName;
-                        OtherInstall InstallForm = new OtherInstall(this);
-                        InstallForm.Show();
-                    }
-                    return;
-                }
-            }
-        }
-
-        private void btnLaunchProduct_Click(object sender, EventArgs e)
-        {
-            string selectedProduct = cbProductList.Text;
-            selectedInstallProduct = cbProductList.Text;
-            selectedProductVersion = cbSPGPVersion.Text;
-
-            if (selectedProduct == "Select a Product")
-            {
-                string message = "Please select a product.";
-                string caption = "ERROR";
-                MessageBoxButtons buttons = MessageBoxButtons.OK;
-                MessageBoxIcon icon = MessageBoxIcon.Error;
-                DialogResult result;
-
-                result = MessageBox.Show(message, caption, buttons, icon);
-                return;
-            }
             if (selectedProduct == "SalesPad Desktop")
             {
                 LaunchSPGP launchSPGPForm = new LaunchSPGP();
+                LaunchSPGP.selectedProductVersion = selectedProductVersion;
                 launchSPGPForm.Show();
                 return;
             }
             else
             {
                 LaunchOtherProducts launchOtherProductsForm = new LaunchOtherProducts();
+                LaunchOtherProducts.selectedInstallProduct = selectedInstallProduct;
                 launchOtherProductsForm.Show();
                 return;
             }
@@ -1689,6 +1720,13 @@ namespace EnvMgr
         private void cbGPListToInstall_SelectedIndexChanged(object sender, EventArgs e)
         {
             //
+            return;
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            About about = new About();
+            about.Show();
             return;
         }
     }

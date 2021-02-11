@@ -38,7 +38,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 13);
+            this.label1.Location = new System.Drawing.Point(3, 5);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(96, 13);
             this.label1.TabIndex = 0;
@@ -46,7 +46,7 @@
             // 
             // tbDBBackupDescription
             // 
-            this.tbDBBackupDescription.Location = new System.Drawing.Point(13, 30);
+            this.tbDBBackupDescription.Location = new System.Drawing.Point(3, 22);
             this.tbDBBackupDescription.Multiline = true;
             this.tbDBBackupDescription.Name = "tbDBBackupDescription";
             this.tbDBBackupDescription.Size = new System.Drawing.Size(384, 158);
@@ -54,7 +54,7 @@
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(246, 194);
+            this.btnOK.Location = new System.Drawing.Point(236, 184);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 2;
@@ -64,7 +64,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(323, 194);
+            this.btnCancel.Location = new System.Drawing.Point(313, 184);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 3;
@@ -76,7 +76,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(409, 224);
+            this.ClientSize = new System.Drawing.Size(390, 209);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.tbDBBackupDescription);

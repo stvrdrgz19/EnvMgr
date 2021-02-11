@@ -7,6 +7,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -19,6 +20,8 @@ namespace EnvMgr
     {
         private Form1 _form1;
         public static bool stopProcess = false;
+        public static string selectedGPVersion = "";
+
         public NewDBBackupSelect(Form1 form1)
         {
             InitializeComponent();
@@ -96,6 +99,12 @@ namespace EnvMgr
             {
                 sw.WriteLine("{" + DateTime.Now + "} - CREATED: " + bakName);
             }
+
+            //Zip DB Folder
+            ZipFile.CreateFromDirectory(dbPath, dbPath + ".zip");
+            //Delete dbPath
+            Directory.Delete(dbPath, true);
+
             string newMessage = "Backup \"" + bakName + "\" was created successfully.";
             string newCaption = "COMPLETE";
             MessageBoxButtons newButtons = MessageBoxButtons.OK;
@@ -177,7 +186,7 @@ namespace EnvMgr
             }
             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
             string dbFolderPath = Convert.ToString(key.GetValue("DB Folder"));
-            string dbPath = Convert.ToString(key.GetValue("DB Folder")) + Form1.selectedGPVersion + "\\" + backupName;
+            string dbPath = Convert.ToString(key.GetValue("DB Folder")) + selectedGPVersion + "\\" + backupName;
             //string sqlServ = Convert.ToString(key.GetValue("SQL Server Name"));
             //string sqlUser = Convert.ToString(key.GetValue("SQL Username"));
             //string sqlPassword = Convert.ToString(key.GetValue("SQL Password"));

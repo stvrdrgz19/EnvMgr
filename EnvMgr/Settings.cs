@@ -98,11 +98,11 @@ namespace EnvMgr
             startingDynamics = tbDynamicsDB.Text;
             startingNonMB = tbNonMBDB.Text;
             startingMB = tbMBDB.Text;
-            startingSPGPx86 = tbSPGPx86Directory.Text;
-            startingSPGPx64 = tbSPGPx64Directory.Text;
-            startingDC = tbDCDirectory.Text;
-            startingSPM = tbSPMDirectory.Text;
-            startingSC = tbSCDirectory.Text;
+            startingSPGPx86 = tbGPx86Dir.Text;
+            startingSPGPx64 = tbGPx64Dir.Text;
+            startingDC = tbDCDir.Text;
+            startingSPM = tbSPMDir.Text;
+            startingSC = tbSCDir.Text;
             startingAutoInstall = cbAutoInstall.Checked;
             startingAutoOverwrite = cbAutoOverwrite.Checked;
             startingTenantName = tbTenantName.Text;
@@ -115,11 +115,11 @@ namespace EnvMgr
             string DynamicsDB = tbDynamicsDB.Text;
             string NonMBDB = tbNonMBDB.Text;
             string MBDB = tbMBDB.Text;
-            string SPGPx86 = tbSPGPx86Directory.Text;
-            string SPGPx64 = tbSPGPx64Directory.Text;
-            string DC = tbDCDirectory.Text;
-            string SPM = tbSPMDirectory.Text;
-            string SC = tbSCDirectory.Text;
+            string SPGPx86 = tbGPx86Dir.Text;
+            string SPGPx64 = tbGPx64Dir.Text;
+            string DC = tbDCDir.Text;
+            string SPM = tbSPMDir.Text;
+            string SC = tbSCDir.Text;
             bool AutoInstall = cbAutoInstall.Checked;
             bool AutoOverwrite = cbAutoOverwrite.Checked;
             string TenantName = tbTenantName.Text;
@@ -159,11 +159,11 @@ namespace EnvMgr
             tbDynamicsDB.Text = Convert.ToString(key.GetValue("Dynamics Database"));
             tbNonMBDB.Text = Convert.ToString(key.GetValue("Non-MB Database"));
             tbMBDB.Text = Convert.ToString(key.GetValue("MB Database"));
-            tbSPGPx86Directory.Text = Convert.ToString(key.GetValue("x86 SPGP Directory"));
-            tbSPGPx64Directory.Text = Convert.ToString(key.GetValue("x64 SPGP Directory"));
-            tbDCDirectory.Text = Convert.ToString(key.GetValue("DC Directory"));
-            tbSPMDirectory.Text = Convert.ToString(key.GetValue("SPM Directory"));
-            tbSCDirectory.Text = Convert.ToString(key.GetValue("SC Directory"));
+            tbGPx86Dir.Text = Convert.ToString(key.GetValue("x86 SPGP Directory"));
+            tbGPx64Dir.Text = Convert.ToString(key.GetValue("x64 SPGP Directory"));
+            tbDCDir.Text = Convert.ToString(key.GetValue("DC Directory"));
+            tbSPMDir.Text = Convert.ToString(key.GetValue("SPM Directory"));
+            tbSCDir.Text = Convert.ToString(key.GetValue("SC Directory"));
             cbAutoInstall.Checked = Convert.ToBoolean(key.GetValue("Auto Install Product"));
             cbAutoOverwrite.Checked = Convert.ToBoolean(key.GetValue("Auto Overwrite Install"));
             tbTenantName.Text = Convert.ToString(key.GetValue("Tenant Name"));
@@ -185,7 +185,7 @@ namespace EnvMgr
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-            bool changesMade = CheckForUnsavedChanges(tbDBDirectory.Text, cbDBMethod.Checked, tbDynamicsDB.Text, tbNonMBDB.Text, tbMBDB.Text, tbSPGPx86Directory.Text, tbSPGPx64Directory.Text, tbDCDirectory.Text, tbSPMDirectory.Text, tbSCDirectory.Text, cbAutoInstall.Checked, cbAutoOverwrite.Checked, tbTenantName.Text);
+            bool changesMade = CheckForUnsavedChanges(tbDBDirectory.Text, cbDBMethod.Checked, tbDynamicsDB.Text, tbNonMBDB.Text, tbMBDB.Text, tbGPx86Dir.Text, tbGPx64Dir.Text, tbDCDir.Text, tbSPMDir.Text, tbSCDir.Text, cbAutoInstall.Checked, cbAutoOverwrite.Checked, tbTenantName.Text);
             if (changesMade == true)
             {
                 string saveChangesMessage = "There are un-saved changes, do you want to save these changes?";
@@ -286,7 +286,7 @@ namespace EnvMgr
                 selectSPGPx86.SelectedPath = @"C:\";
                 if (selectSPGPx86.ShowDialog() == DialogResult.OK)
                 {
-                    tbSPGPx86Directory.Text = selectSPGPx86.SelectedPath + "\\";
+                    tbGPx86Dir.Text = selectSPGPx86.SelectedPath + "\\";
                 }
                 return;
             }
@@ -300,7 +300,7 @@ namespace EnvMgr
                 selectSPGPx64.SelectedPath = @"C:\";
                 if (selectSPGPx64.ShowDialog() == DialogResult.OK)
                 {
-                    tbSPGPx64Directory.Text = selectSPGPx64.SelectedPath + "\\";
+                    tbGPx64Dir.Text = selectSPGPx64.SelectedPath + "\\";
                 }
                 return;
             }
@@ -314,7 +314,7 @@ namespace EnvMgr
                 selectDC.SelectedPath = @"C:\";
                 if (selectDC.ShowDialog() == DialogResult.OK)
                 {
-                    tbDCDirectory.Text = selectDC.SelectedPath + "\\";
+                    tbDCDir.Text = selectDC.SelectedPath + "\\";
                 }
                 return;
             }
@@ -328,7 +328,7 @@ namespace EnvMgr
                 selectSPM.SelectedPath = @"C:\";
                 if (selectSPM.ShowDialog() == DialogResult.OK)
                 {
-                    tbSPMDirectory.Text = selectSPM.SelectedPath + "\\";
+                    tbSPMDir.Text = selectSPM.SelectedPath + "\\";
                 }
                 return;
             }
@@ -342,7 +342,7 @@ namespace EnvMgr
                 selectSC.SelectedPath = @"C:\";
                 if (selectSC.ShowDialog() == DialogResult.OK)
                 {
-                    tbSCDirectory.Text = selectSC.SelectedPath + "\\";
+                    tbSCDir.Text = selectSC.SelectedPath + "\\";
                 }
                 return;
             }
@@ -367,7 +367,7 @@ namespace EnvMgr
 
         private void btnExport_Click(object sender, EventArgs e)
         {
-            bool unsavedChanges = CheckForUnsavedChanges(tbDBDirectory.Text, cbDBMethod.Checked, tbDynamicsDB.Text, tbNonMBDB.Text, tbMBDB.Text, tbSPGPx86Directory.Text, tbSPGPx64Directory.Text, tbDCDirectory.Text, tbSPMDirectory.Text, tbSCDirectory.Text, cbAutoInstall.Checked, cbAutoOverwrite.Checked, tbTenantName.Text);
+            bool unsavedChanges = CheckForUnsavedChanges(tbDBDirectory.Text, cbDBMethod.Checked, tbDynamicsDB.Text, tbNonMBDB.Text, tbMBDB.Text, tbGPx86Dir.Text, tbGPx64Dir.Text, tbDCDir.Text, tbSPMDir.Text, tbSCDir.Text, cbAutoInstall.Checked, cbAutoOverwrite.Checked, tbTenantName.Text);
             if (unsavedChanges == true)
             {
                 string message = "You must save changes made to Settings before Exporting. Do you want to Save and Export?";

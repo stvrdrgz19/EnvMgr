@@ -24,6 +24,9 @@ namespace EnvMgr
             _form1 = form1;
         }
 
+        public static string selectedGPVersion = "";
+        public static string dbToOverwrite = "";
+
         private void ButtonsEnabled(bool tf)
         {
             btnOK.Enabled = tf;
@@ -68,7 +71,7 @@ namespace EnvMgr
         {
             lbExistingDatabases.Items.Clear();
             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
-            string dbPath = Convert.ToString(key.GetValue("DB Folder")) + Form1.selectedGPVersion + "\\" + Form1.dbToOverwrite;
+            string dbPath = Convert.ToString(key.GetValue("DB Folder")) + selectedGPVersion + "\\" + dbToOverwrite;
             string[] backupFiles = Directory.GetFiles(dbPath, "*.bak");
             foreach (string file in backupFiles)
             {
@@ -116,7 +119,7 @@ namespace EnvMgr
                     {
                         sw.WriteLine("{" + DateTime.Now + "} - OVERWROTE: " + bakName);
                     }
-                    string message = "Backup \"" + Form1.dbToOverwrite + "\" was overwritten successfully.";
+                    string message = "Backup \"" + dbToOverwrite + "\" was overwritten successfully.";
                     string caption = "COMPLETE";
                     MessageBoxButtons button = MessageBoxButtons.OK;
                     MessageBoxIcon icon = MessageBoxIcon.Exclamation;
@@ -160,7 +163,7 @@ namespace EnvMgr
                 selectedDatabases.Add(database);
             }
             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
-            string path = Convert.ToString(key.GetValue("DB Folder")) + Form1.selectedGPVersion + "\\" + Form1.dbToOverwrite + "\\";
+            string path = Convert.ToString(key.GetValue("DB Folder")) + selectedGPVersion + "\\" + dbToOverwrite + "\\";
             foreach (string database in lbDatabaseFiles.SelectedItems)
             {
                 string filePath = path + database + ".bak";
@@ -169,7 +172,7 @@ namespace EnvMgr
                     File.Delete(filePath);
                 }
             }
-            Thread overProcess = new Thread(() => OverwriteDatabases(selectedDatabases.ToArray(), path, Form1.dbToOverwrite, backupDescription));
+            Thread overProcess = new Thread(() => OverwriteDatabases(selectedDatabases.ToArray(), path, dbToOverwrite, backupDescription));
             overProcess.Start();
             return;
         }

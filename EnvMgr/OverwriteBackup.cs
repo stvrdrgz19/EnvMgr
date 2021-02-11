@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -22,6 +23,9 @@ namespace EnvMgr
             InitializeComponent();
             _form1 = form1;
         }
+
+        public static string selectedGPVersion = "";
+        public static string dbToCreate = "";
 
         public void OverwriteDBThread(string dynamicsScript, string nonMBScript, string mbScript, string dbPath)
         {
@@ -46,7 +50,8 @@ namespace EnvMgr
                 {
                     try
                     {
-                        Directory.Delete(dbPath, true);
+                        //Directory.Delete(dbPath, true);
+                        File.Delete(dbPath + ".zip");
                     }
                     catch (Exception e1)
                     {
@@ -78,15 +83,18 @@ namespace EnvMgr
                 using (StreamWriter sw = File.AppendText(dbPath + @"\Description.txt"))
                 {
                     sw.WriteLine("===============================================================================");
-                    sw.WriteLine("BACKUP - " + Form1.dbToCreate);
+                    sw.WriteLine("BACKUP - " + dbToCreate);
                     sw.WriteLine(DateTime.Now);
                     sw.WriteLine(bakDescription);
                 }
                 using (StreamWriter sw = File.AppendText(Environment.CurrentDirectory + @"\Files\Database Log.txt"))
                 {
-                    sw.WriteLine("{" + DateTime.Now + "} - OVERWROTE: " + Form1.dbToCreate);
+                    sw.WriteLine("{" + DateTime.Now + "} - OVERWROTE: " + dbToCreate);
                 }
-                string message = "Backup \"" + Form1.dbToCreate + "\" was overwritten successfully.";
+
+                ZipFile.CreateFromDirectory(dbPath, dbPath + ".zip");
+
+                string message = "Backup \"" + dbToCreate + "\" was overwritten successfully.";
                 string caption = "COMPLETE";
                 MessageBoxButtons button = MessageBoxButtons.OK;
                 MessageBoxIcon icon = MessageBoxIcon.Exclamation;
@@ -109,7 +117,7 @@ namespace EnvMgr
             string bakDescription = tbDBBackupDescription.Text;
 
             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
-            string dbPath = Convert.ToString(key.GetValue("DB Folder")) + Form1.selectedGPVersion + "\\" + Form1.dbToCreate;
+            string dbPath = Convert.ToString(key.GetValue("DB Folder")) + selectedGPVersion + "\\" + dbToCreate;
             string dynamicsDB = Convert.ToString(key.GetValue("Dynamics Database"));
             string nonMBDB = Convert.ToString(key.GetValue("Non-MB Database"));
             string mbDB = Convert.ToString(key.GetValue("MB Database"));

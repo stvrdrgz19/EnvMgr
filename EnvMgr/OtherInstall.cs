@@ -23,7 +23,9 @@ namespace EnvMgr
             _form1 = form1;
         }
 
-        public string Product = Form1.selectedInstallProduct;
+        public static string selectedInstallProduct = "";
+        public static string ProductFileName = "";
+        public static string ProductFilePath = "";
 
         public void ExecuteAsAdmin(string fileName)
         {
@@ -51,30 +53,30 @@ namespace EnvMgr
             //LOG INSTALL
             using (StreamWriter sw = File.AppendText(Environment.CurrentDirectory + @"\Files\InstallLog.txt"))
             {
-                sw.WriteLine("{" + DateTime.Now + "} - " + Product + ": " + fromLocation);
+                sw.WriteLine("{" + DateTime.Now + "} - " + selectedInstallProduct + ": " + fromLocation);
             }
 
             RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Environment Manager");
-            if (Product == "SalesPad Mobile")
+            if (selectedInstallProduct == "SalesPad Mobile")
             {
                 Process.Start(toLocation + "\\SalesPad.GP.Mobile.Server.exe");
                 key.SetValue("zLastSPMobileInstall", fromLocation);
                 key.SetValue("zLastSPMobileInstallLocal", toLocation);
             }
-            if (Product == "DataCollection")
+            if (selectedInstallProduct == "DataCollection")
             {
                 string DCLaunchPath = toLocation + "\\DataCollection Extended Warehouse.exe";
                 ExecuteAsAdmin(DCLaunchPath);
                 key.SetValue("zLastDCInstall", fromLocation);
                 key.SetValue("zLastDCInstallLocal", toLocation);
             }
-            if (Product == "ShipCenter")
+            if (selectedInstallProduct == "ShipCenter")
             {
                 Process.Start(toLocation + "\\SalesPad.ShipCenter.exe");
                 key.SetValue("zLastSCInstall", fromLocation);
                 key.SetValue("zLastSCInstallLocal", toLocation);
             }
-            if (Product == "Card Control")
+            if (selectedInstallProduct == "Card Control")
             {
                 Process.Start(toLocation + "\\CardControl.exe");
                 key.SetValue("zLastCCInstall", fromLocation);
@@ -85,24 +87,24 @@ namespace EnvMgr
 
         private void OtherInstall_Load(object sender, EventArgs e)
         {
-            tbFromLocation.Text = Form1.ProductFilePath;
-            string pathToSplit = Path.GetDirectoryName(Form1.ProductFileName);
-            if (Form1.selectedInstallProduct == "SalesPad Mobile")
+            tbFromLocation.Text = ProductFilePath;
+            string pathToSplit = Path.GetDirectoryName(ProductFileName);
+            if (selectedInstallProduct == "SalesPad Mobile")
             {
                 string splitPath = pathToSplit.Remove(0, 50);
                 tbToLocation.Text = @"C:\Program Files (x86)\SalesPad.GP.Mobile.Server\" + splitPath;
             }
-            else if (Form1.selectedInstallProduct == "DataCollection")
+            else if (selectedInstallProduct == "DataCollection")
             {
                 string splitPath = pathToSplit.Remove(0, 51);
                 tbToLocation.Text = @"C:\Program Files (x86)\DataCollection\" + splitPath;
             }
-            else if (Form1.selectedInstallProduct == "ShipCenter")
+            else if (selectedInstallProduct == "ShipCenter")
             {
                 string splitPath = pathToSplit.Remove(0, 42);
                 tbToLocation.Text = @"C:\Program Files (x86)\ShipCenter\" + splitPath;
             }
-            else if (Form1.selectedInstallProduct == "Card Control")
+            else if (selectedInstallProduct == "Card Control")
             {
                 string splitPath = pathToSplit.Remove(0, 36);
                 tbToLocation.Text = @"C:\Program Files (x86)\CardControl\" + splitPath;
@@ -119,9 +121,9 @@ namespace EnvMgr
 
             string fromLocation = tbFromLocation.Text;
             string toLocation = tbToLocation.Text;
-            string fileNamePath = Form1.ProductFileName;
+            string fileNamePath = ProductFileName;
             string fileName = Path.GetFileName(fileNamePath);
-            string filePath = Form1.ProductFilePath;
+            string filePath = ProductFilePath;
             string tempInstallPath = Environment.CurrentDirectory + @"\Installers\" + fileName;
 
             if (toLocation == @"C:\Program Files (x86)\SalesPad.GP.Mobile.Server\" || toLocation == @"C:\Program Files (x86)\DataCollection\" || toLocation == @"C:\Program Files (x86)\ShipCenter\" || toLocation == @"C:\Program Files (x86)\CardControl\")
@@ -145,7 +147,7 @@ namespace EnvMgr
 
                 existsResult = MessageBox.Show(existsMessage, existsCaption, existsButtons, existsIcon);
                 {
-                    if (existsResult == System.Windows.Forms.DialogResult.Yes)
+                    if (existsResult == DialogResult.Yes)
                     {
                         Directory.Delete(toLocation, true);
                     }

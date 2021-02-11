@@ -18,6 +18,9 @@ namespace EnvMgr
         {
             InitializeComponent();
         }
+
+        public static string selectedInstallProduct = "";
+
         private void LoadBuildList(string baseFolder, string executableFile)
         {
             string[] buildPath = Directory.GetFiles(baseFolder, executableFile, SearchOption.AllDirectories);
@@ -30,17 +33,17 @@ namespace EnvMgr
 
         private void LaunchOtherProducts_Load(object sender, EventArgs e)
         {
-            if (Form1.selectedInstallProduct == "SalesPad Mobile")
+            if (selectedInstallProduct == "SalesPad Mobile")
             {
                 LoadBuildList(@"C:\Program Files (x86)\SalesPad.GP.Mobile.Server\", "*SalesPad.GP.Mobile.Server.exe");
                 return;
             }
-            if (Form1.selectedInstallProduct == "DataCollection")
+            if (selectedInstallProduct == "DataCollection")
             {
                 LoadBuildList(@"C:\Program Files (x86)\DataCollection\", "*DataCollection Extended Warehouse.exe");
                 return;
             }
-            if (Form1.selectedInstallProduct == "ShipCenter")
+            if (selectedInstallProduct == "ShipCenter")
             {
                 LoadBuildList(@"C:\Program Files (x86)\ShipCenter\", "*SalesPad.ShipCenter.exe");
                 return;
@@ -60,25 +63,25 @@ namespace EnvMgr
                 errorResult = MessageBox.Show(errorMessage, errorCaption, errorButton, errorIcon);
                 return;
             }
-            if (Form1.selectedInstallProduct == "SalesPad Mobile")
+            if (selectedInstallProduct == "SalesPad Mobile")
             {
                 string selectedBuild = lbInstalledBuilds.Text.ToString();
                 Process.Start(selectedBuild + @"\SalesPad.GP.Mobile.Server.exe");
                 this.Close();
             }
-            if (Form1.selectedInstallProduct == "DataCollection")
+            if (selectedInstallProduct == "DataCollection")
             {
                 string selectedBuild = lbInstalledBuilds.Text.ToString();
                 Process.Start(selectedBuild + @"\DataCollection Extended Warehouse.exe");
                 this.Close();
             }
-            if (Form1.selectedInstallProduct == "ShipCenter")
+            if (selectedInstallProduct == "ShipCenter")
             {
                 string selectedBuild = lbInstalledBuilds.Text.ToString();
                 Process.Start(selectedBuild + @"\SalesPad.ShipCenter.exe");
                 this.Close();
             }
-            if (Form1.selectedInstallProduct == "Card Control")
+            if (selectedInstallProduct == "Card Control")
             {
                 string selectedBuild = lbInstalledBuilds.Text.ToString();
                 Process.Start(selectedBuild + @"\CardControl.exe");
