@@ -75,18 +75,18 @@
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.button1 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.tbSCDir = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.tbSPMDir = new System.Windows.Forms.TextBox();
+            this.tbDCDir = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.tbGPx64Dir = new System.Windows.Forms.TextBox();
+            this.tbGPx86Dir = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
@@ -514,18 +514,18 @@
             this.groupBox4.Controls.Add(this.checkBox1);
             this.groupBox4.Controls.Add(this.checkBox2);
             this.groupBox4.Controls.Add(this.button1);
-            this.groupBox4.Controls.Add(this.textBox1);
+            this.groupBox4.Controls.Add(this.tbSCDir);
             this.groupBox4.Controls.Add(this.label4);
             this.groupBox4.Controls.Add(this.button2);
             this.groupBox4.Controls.Add(this.button3);
-            this.groupBox4.Controls.Add(this.textBox2);
-            this.groupBox4.Controls.Add(this.textBox3);
+            this.groupBox4.Controls.Add(this.tbSPMDir);
+            this.groupBox4.Controls.Add(this.tbDCDir);
             this.groupBox4.Controls.Add(this.label5);
             this.groupBox4.Controls.Add(this.label6);
             this.groupBox4.Controls.Add(this.button4);
             this.groupBox4.Controls.Add(this.button5);
-            this.groupBox4.Controls.Add(this.textBox4);
-            this.groupBox4.Controls.Add(this.textBox5);
+            this.groupBox4.Controls.Add(this.tbGPx64Dir);
+            this.groupBox4.Controls.Add(this.tbGPx86Dir);
             this.groupBox4.Controls.Add(this.label14);
             this.groupBox4.Controls.Add(this.label15);
             this.groupBox4.ForeColor = System.Drawing.Color.Blue;
@@ -592,13 +592,13 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.btnSCDirectory_Click);
             // 
-            // textBox1
+            // tbSCDir
             // 
-            this.textBox1.Location = new System.Drawing.Point(109, 114);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(282, 20);
-            this.textBox1.TabIndex = 30;
+            this.tbSCDir.Location = new System.Drawing.Point(109, 114);
+            this.tbSCDir.Name = "tbSCDir";
+            this.tbSCDir.ReadOnly = true;
+            this.tbSCDir.Size = new System.Drawing.Size(282, 20);
+            this.tbSCDir.TabIndex = 30;
             // 
             // label4
             // 
@@ -630,21 +630,21 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.btnDCDirectory_Click);
             // 
-            // textBox2
+            // tbSPMDir
             // 
-            this.textBox2.Location = new System.Drawing.Point(109, 90);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(282, 20);
-            this.textBox2.TabIndex = 26;
+            this.tbSPMDir.Location = new System.Drawing.Point(109, 90);
+            this.tbSPMDir.Name = "tbSPMDir";
+            this.tbSPMDir.ReadOnly = true;
+            this.tbSPMDir.Size = new System.Drawing.Size(282, 20);
+            this.tbSPMDir.TabIndex = 26;
             // 
-            // textBox3
+            // tbDCDir
             // 
-            this.textBox3.Location = new System.Drawing.Point(109, 66);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.ReadOnly = true;
-            this.textBox3.Size = new System.Drawing.Size(282, 20);
-            this.textBox3.TabIndex = 25;
+            this.tbDCDir.Location = new System.Drawing.Point(109, 66);
+            this.tbDCDir.Name = "tbDCDir";
+            this.tbDCDir.ReadOnly = true;
+            this.tbDCDir.Size = new System.Drawing.Size(282, 20);
+            this.tbDCDir.TabIndex = 25;
             // 
             // label5
             // 
@@ -686,21 +686,21 @@
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.btnSPGPx86Directory_Click);
             // 
-            // textBox4
+            // tbGPx64Dir
             // 
-            this.textBox4.Location = new System.Drawing.Point(109, 43);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.ReadOnly = true;
-            this.textBox4.Size = new System.Drawing.Size(282, 20);
-            this.textBox4.TabIndex = 20;
+            this.tbGPx64Dir.Location = new System.Drawing.Point(109, 43);
+            this.tbGPx64Dir.Name = "tbGPx64Dir";
+            this.tbGPx64Dir.ReadOnly = true;
+            this.tbGPx64Dir.Size = new System.Drawing.Size(282, 20);
+            this.tbGPx64Dir.TabIndex = 20;
             // 
-            // textBox5
+            // tbGPx86Dir
             // 
-            this.textBox5.Location = new System.Drawing.Point(109, 19);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.ReadOnly = true;
-            this.textBox5.Size = new System.Drawing.Size(282, 20);
-            this.textBox5.TabIndex = 19;
+            this.tbGPx86Dir.Location = new System.Drawing.Point(109, 19);
+            this.tbGPx86Dir.Name = "tbGPx86Dir";
+            this.tbGPx86Dir.ReadOnly = true;
+            this.tbGPx86Dir.Size = new System.Drawing.Size(282, 20);
+            this.tbGPx86Dir.TabIndex = 19;
             // 
             // label14
             // 
@@ -799,18 +799,18 @@
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox tbSCDir;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox tbSPMDir;
+        private System.Windows.Forms.TextBox tbDCDir;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.TextBox tbGPx64Dir;
+        private System.Windows.Forms.TextBox tbGPx86Dir;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label17;

@@ -55,6 +55,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="About.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="About.Designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
+    </Compile>
     <Compile Include="BackupBackups.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -73,6 +79,12 @@
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DBDesc.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DBDesc.Designer.cs">
+      <DependentUpon>DBDesc.cs</DependentUpon>
     </Compile>
     <Compile Include="LastInstalled.cs">
       <SubType>Form</SubType>
@@ -173,6 +185,9 @@
     <Compile Include="Utilities.Designer.cs">
       <DependentUpon>Utilities.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="About.resx">
+      <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="BackupBackups.resx">
       <DependentUpon>BackupBackups.cs</DependentUpon>
     </EmbeddedResource>
@@ -181,6 +196,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DBDesc.resx">
+      <DependentUpon>DBDesc.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LastInstalled.resx">
       <DependentUpon>LastInstalled.cs</DependentUpon>

@@ -181,6 +181,7 @@ namespace EnvMgr
             dllIgnoreList.Add("SalesPad.Module.SalesEntryQuickPick.dll");
             dllIgnoreList.Add("SalesPad.Module.SignaturePad.dll");
             dllIgnoreList.Add("SalesPad.Module.GP2015.dll");
+            dllIgnoreList.Add("SalesPad.Module.SquareIntegration.dll");
 
             SelectedBuildDLLs.Items.Clear();
             string selectedBuild = InstalledBuilds.Text + @"\";

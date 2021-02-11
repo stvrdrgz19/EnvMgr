@@ -141,7 +141,7 @@
             this.purgeGPDatabasesToolStripMenuItem,
             this.killSalesPadToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
             // utilitiesToolStripMenuItem
@@ -252,6 +252,7 @@
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // groupBox1
             // 
@@ -285,6 +286,7 @@
             // checkManufacturingToggle
             // 
             this.checkManufacturingToggle.AutoSize = true;
+            this.checkManufacturingToggle.Enabled = false;
             this.checkManufacturingToggle.ForeColor = System.Drawing.SystemColors.ControlText;
             this.checkManufacturingToggle.Location = new System.Drawing.Point(156, 182);
             this.checkManufacturingToggle.Name = "checkManufacturingToggle";
@@ -526,6 +528,7 @@
             // 
             // btnDBBackupDescription
             // 
+            this.btnDBBackupDescription.Enabled = false;
             this.btnDBBackupDescription.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnDBBackupDescription.Image = ((System.Drawing.Image)(resources.GetObject("btnDBBackupDescription.Image")));
             this.btnDBBackupDescription.Location = new System.Drawing.Point(482, 19);
